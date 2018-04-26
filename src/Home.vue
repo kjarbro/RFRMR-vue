@@ -45,6 +45,7 @@
                                 <v-btn icon @click.native="setActiveSeed(seed['.key'])">
                                     <v-icon>{{ activeSeedKey == seed['.key'] ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
                                 </v-btn>
+
                             </v-card-actions>
                             <!--<v-slide-y-transition>-->
                                 <v-card-text v-if="activeSeedKey == seed['.key']">
@@ -99,7 +100,7 @@ export default {
       seedDescription: '',
       activeSeedKey: '',
       dialog: false,
-      seedCategory:''
+      seedCategory:'',
     };
   },
   firebase: {
@@ -109,12 +110,11 @@ export default {
   methods: {
     setActiveSeed(key) {
         this.activeSeedKey = (this.activeSeedKey == key) ? '' : key
-             
     },
     submitSeed(){
-      seedsRef.push({Title: this.seedTitle, Description: this.seedDescription, User: this.signedInUser, Category: this.seedCategory,  edit:false})
-      this.seedTitle =''
-      this.seedDescription =''
+        seedsRef.push({Title: this.seedTitle, Description: this.seedDescription,  Category: this.seedCategory,  edit:false})
+        this.seedTitle =''
+        this.seedDescription =''
     },
     setEditSeed(key){
       seedsRef.child(key).update({edit: true})

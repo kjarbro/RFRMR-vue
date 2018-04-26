@@ -5,13 +5,21 @@
       v-model="drawer"
       app>
       <v-list dense>
+         <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>contact_mail</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>User Profile</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
         
         <v-list-tile @click="">
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Home</v-list-tile-title>
+            <v-list-tile-title>My Seeds</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
@@ -20,9 +28,10 @@
             <v-icon>contact_mail</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Contact</v-list-tile-title>
+            <v-list-tile-title>My Sprouts</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+
 
       </v-list>
     </v-navigation-drawer>
