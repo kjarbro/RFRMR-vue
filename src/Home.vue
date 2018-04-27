@@ -88,12 +88,13 @@
 </template>
 
 <script>
+import firebase from './firebase'
 import {seedsRef} from './firebase'
+import {mapMutations} from 'vuex'
+import {mapState} from 'vuex'
+
 
 export default {
-    props: {
-        signedInUser : { type: Object }
-    },
   data () {
     return {
       seedTitle: '',
@@ -101,18 +102,26 @@ export default {
       activeSeedKey: '',
       dialog: false,
       seedCategory:'',
+      userId: ''
     };
+    
+    
   },
   firebase: {
     seeds: seedsRef
   }, 
 
   methods: {
+
+    anymethod(){
+        console.log(this.$store, this.store, this)
+    },
     setActiveSeed(key) {
         this.activeSeedKey = (this.activeSeedKey == key) ? '' : key
     },
-    submitSeed(){
-        seedsRef.push({Title: this.seedTitle, Description: this.seedDescription,  Category: this.seedCategory,  edit:false})
+    submitSeed(user){
+    
+        seedsRef.push({Title: this.seedTitle, Description: this.seedDescription, Category: this.seedCategory, UserID: this.user.uid , edit:false})
         this.seedTitle =''
         this.seedDescription =''
     },
@@ -132,7 +141,17 @@ export default {
     showSeed (key){
         const seed = seedsRef.child(key)
         {to="{path:'/seed/:seed', params: {seed}}"}
-    }
+    },
+    ...mapMutations(['setUser'])
+  },
+  computed: {
+      //user () {
+      //    return this.$store.state.user;
+      //}
+      computedthing(){
+      return this.$route.params
+      },
+      ...mapState(['user'])
   }
 }
 </script>

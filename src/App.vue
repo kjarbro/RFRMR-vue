@@ -154,44 +154,47 @@
 
 <script>
 import firebase from 'firebase'
+import {mapMutations} from 'vuex'
+import {mapState} from 'vuex'
 
 export default {
   data () {
     return {
       drawer: false,
-      signedInUser : firebase.auth().currentUser,
       signUpDialog: false,
       signInDialog: false,
       logOutDialog: false,
       userName: '',
       userEmail: '',
       userPassword:'',
-      user: '',
+      userId:'',
     };
   },
   
   mounted () {
-    var user = firebase.auth().currentUser;
-
+    const user = firebase.auth().currentUser;
+    const self = this
     firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
+      self.setUser(user)
       // User is signed in.
-      user = firebase.auth().currentUser
-      console.log('history')
-      console.log(user)
+
     } else {
       // No user is signed in.
-      console.log('herstory')
+      console.log('No User')
       user = firebase.auth().currentUser
     }
 });
   },
+  computed : mapState(['user']),
   methods : {
     signUp (user) {
       var name = this.userName
       var email = this.userEmail
       var password = this.userPassword
       firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        this.user = user
+        this.userId = user.uid
         this.userName = ''
         this.userEmail = ''
         this.userPassword = ''
@@ -201,9 +204,11 @@ export default {
       var email = this.userEmail
       var password = this.userPassword
       firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+        this.user = user
+        this.userId = user.uid
         this.userEmail = ''
         this.userPassword = ''
-         
+
       })
     },
     handleUser (user) {
@@ -213,6 +218,7 @@ export default {
         // User is signed in.
         user = firebase.auth().currentUser
           this.drawer = !this.drawer
+          console.log(this.userId)
       } else {
         // No user is signed in.
         console.log('hell yeah')
@@ -227,7 +233,8 @@ export default {
       }).catch(function(error) {
         // An error happened.
       });
-    }
+    },
+    ...mapMutations(['setUser']),
   }
 }
 

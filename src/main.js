@@ -8,15 +8,17 @@ import Home from './Home.vue';
 import Sprout from './Sprout.vue';
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+import Vuex from 'vuex'
 
+Vue.use(Vuex)
 Vue.use(Vuetify)
 Vue.use(VueFire);
 Vue.use(VueRouter);
 
 const routes = [
-  {path:'/seed/:id', component: Seed, props: { signedInUser: App.data().signedInUser } },
-  {path:'/', component: Home, props: { signedInUser: App.data().signedInUser } },
-  {path:'/sprout', component: Sprout, props: { signedInUser: App.data().signedInUser } }
+  {path:'/seed/:id', component: Seed},
+  {path:'/', component: Home },
+  {path:'/sprout', component: Sprout}
 ];
 
 const router = new VueRouter({
@@ -24,9 +26,20 @@ const router = new VueRouter({
   mode: 'history'
 })
 
+const store = new Vuex.Store({
+  state: {
+    user: ''
+  },
+  mutations: {
+    setUser (state, user) {
+      state.user = user
+    }
+  }
+})
 
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })
