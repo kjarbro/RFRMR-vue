@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id = 'home'>
     <!-- Submit Seed Card--> 
         <v-card class="SeedCard">
             <v-card-title primary-title>
@@ -37,6 +37,8 @@
                             <v-card-title primary-title>
                                 <div class="headline">{{seed.Title}}</div>
                             </v-card-title>
+                            <br>
+                            <small class = "seedCard"> by: {{seed.UserID}}</small>
                             <v-card-actions>
                                 <v-btn flat @click="showSeed(seed['.key'])">Show</v-btn>
                                 <v-btn flat @click="deleteSeed(seed['.key'])">Delete</v-btn>
@@ -50,6 +52,7 @@
                             <!--<v-slide-y-transition>-->
                                 <v-card-text v-if="activeSeedKey == seed['.key']">
                                     {{seed.Description}}
+                                    
                                 </v-card-text>
                             <!-- </v-slide-y-transition> -->
                         </v-card>
@@ -102,20 +105,14 @@ export default {
       activeSeedKey: '',
       dialog: false,
       seedCategory:'',
-      userId: ''
+      userId: '',
     };
-    
-    
   },
   firebase: {
     seeds: seedsRef
   }, 
 
   methods: {
-
-    anymethod(){
-        console.log(this.$store, this.store, this)
-    },
     setActiveSeed(key) {
         this.activeSeedKey = (this.activeSeedKey == key) ? '' : key
     },
@@ -139,19 +136,20 @@ export default {
       seedsRef.child(key).update({edit: false, dialog: false})
     },
     showSeed (key){
-        const seed = seedsRef.child(key)
-        {to="{path:'/seed/:seed', params: {seed}}"}
+        const self = this
+        var seedId = seedsRef.child(key).key
+        self.setSeedId(seedId)
+        console.log(self.setSeedId)
+        self.$router.push({name: 'seedPage', params: { seedId }})
+
+
     },
-    ...mapMutations(['setUser'])
+    ...mapMutations(['setUser']),
+    ...mapMutations(['setSeedId'])
   },
   computed: {
-      //user () {
-      //    return this.$store.state.user;
-      //}
-      computedthing(){
-      return this.$route.params
-      },
-      ...mapState(['user'])
+      ...mapState(['user']),
+      ...mapState(['seed'])
   }
 }
 </script>

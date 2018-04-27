@@ -3,9 +3,9 @@ import Vue from 'vue';
 import App from './App.vue';
 import VueFire from 'vuefire';
 import VueRouter from 'vue-router';
-import Seed from './seed.vue';
+import seedPage from './seedPage.vue';
 import Home from './Home.vue';
-import Sprout from './Sprout.vue';
+import sproutPage from './sproutPage.vue';
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import Vuex from 'vuex'
@@ -16,9 +16,17 @@ Vue.use(VueFire);
 Vue.use(VueRouter);
 
 const routes = [
-  {path:'/seed/:id', component: Seed},
-  {path:'/', component: Home },
-  {path:'/sprout', component: Sprout}
+  {path:'/seed/:seedId',
+  name: 'seedPage', 
+  component: seedPage,},
+
+  {path:'/',
+  name: 'homePage',
+  component: Home },
+
+  {path:'/sprout',
+  name: 'sproutPage',
+  component: sproutPage}
 ];
 
 const router = new VueRouter({
@@ -28,16 +36,19 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
   state: {
-    user: ''
+    user: '',
+    seedId: '',
   },
   mutations: {
     setUser (state, user) {
       state.user = user
-    }
-  }
+    },
+    setSeedId (state, seedId){
+    state.seedId = seedId
+  }}
 })
 
-new Vue({
+var app = new Vue({
   el: '#app',
   router,
   store,

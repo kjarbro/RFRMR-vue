@@ -182,7 +182,6 @@ export default {
     } else {
       // No user is signed in.
       console.log('No User')
-      user = firebase.auth().currentUser
     }
 });
   },
@@ -193,8 +192,6 @@ export default {
       var email = this.userEmail
       var password = this.userPassword
       firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-        this.user = user
-        this.userId = user.uid
         this.userName = ''
         this.userEmail = ''
         this.userPassword = ''
@@ -204,11 +201,8 @@ export default {
       var email = this.userEmail
       var password = this.userPassword
       firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-        this.user = user
-        this.userId = user.uid
         this.userEmail = ''
         this.userPassword = ''
-
       })
     },
     handleUser (user) {
