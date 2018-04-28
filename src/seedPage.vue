@@ -1,21 +1,23 @@
 <template>
-  <div id = 'home'>
+  <div id = 'seedPage'>
+      <div>
     <!-- Submit Seed Card--> 
         <v-card class="SeedCard">
             <v-card-title primary-title>
-                Title Here
+                {{currentSeed.Title}}
             </v-card-title>
 
             <v-card-text>
-               <small>Description Here</small> 
+               <small>{{currentSeed.Description}}</small> 
             </v-card-text>
 
             <v-card-actions>
                 <v-btn flat @click="submitSeed()">Plant your Seed</v-btn>
             </v-card-actions>
         </v-card>
-     
-            </div>
+        </div>
+        <div></div>
+    </div>
     </v-layout>
     </div>
   </div>
@@ -37,50 +39,52 @@ export default {
       dialog: false,
       seedCategory:'',
       userId: '',
+      currentSeed: '',
     };
   },
   firebase: {
     seeds: seedsRef
   }, 
- mounted () {
-    var key = this.$route.params.seedId
-    var currentSeed = seedsRef.child(key).on
-    var currentSeedTitle = currentSeed.Title
-    console.log(key)
-    console.log(currentSeed)
-    console.log(currentSeed.Title)
+ mounted (currentSeed) {
+    const self = this
+    var key = self.$route.params.seedId
+    var firebaseSeed = seedsRef.child(key).on("value", function(snapshot) {
+        self.currentSeed = snapshot.val()
+        }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+        })
     },
   methods: {
-    setActiveSeed(key) {
-        this.activeSeedKey = (this.activeSeedKey == key) ? '' : key
-    },
-    submitSeed(user){
+    // setActiveSeed(key) {
+    //     this.activeSeedKey = (this.activeSeedKey == key) ? '' : key
+    // },
+    // submitSeed(user){
     
-        seedsRef.push({Title: this.seedTitle, Description: this.seedDescription, Category: this.seedCategory, UserID: this.user.uid , edit:false})
-        this.seedTitle =''
-        this.seedDescription =''
-    },
-    setEditSeed(key){
-      seedsRef.child(key).update({edit: true})
-    },
-    deleteSeed(key){
-      seedsRef.child(key).remove();
-    },
-    saveEdit(seed){
-      const key = seed['.key']
-      seedsRef.child(key).set({Title: seed.Title, Description: seed.Description , edit: false, dialog: false})
-    },
-    cancelEdit(key){
-      seedsRef.child(key).update({edit: false, dialog: false})
-    },
-    showSeed (key){
-        const self = this
-        var seedId = seedsRef.child(key).key
-        self.setSeedId(seedId)
-        console.log(self.setCurrentSeed)
-        self.$router.push({name: 'seedPage', params: { seedId }})
+    //     seedsRef.push({Title: this.seedTitle, Description: this.seedDescription, Category: this.seedCategory, UserID: this.user.uid , edit:false})
+    //     this.seedTitle =''
+    //     this.seedDescription =''
+    // },
+    // setEditSeed(key){
+    //   seedsRef.child(key).update({edit: true})
+    // },
+    // deleteSeed(key){
+    //   seedsRef.child(key).remove();
+    // },
+    // saveEdit(seed){
+    //   const key = seed['.key']
+    //   seedsRef.child(key).set({Title: seed.Title, Description: seed.Description , edit: false, dialog: false})
+    // },
+    // cancelEdit(key){
+    //   seedsRef.child(key).update({edit: false, dialog: false})
+    // },
+    // showSeed (key){
+    //     const self = this
+    //     var seedId = seedsRef.child(key).key
+    //     self.setSeedId(seedId)
+    //     console.log(self.setCurrentSeed)
+    //     self.$router.push({name: 'seedPage', params: { seedId }})
 
-    },
+    // },
     ...mapMutations(['setUser']),
     ...mapMutations(['setSeedId'])
   },

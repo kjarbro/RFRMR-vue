@@ -38,7 +38,7 @@
 
     <v-toolbar color="teal"fixed app>
       <v-toolbar-side-icon @click.stop="handleUser"></v-toolbar-side-icon>
-      <v-toolbar-title class="white--text" v-bind:to="'home'">RFRMR</v-toolbar-title>
+      <v-toolbar-title class="white--text">RFRMR</v-toolbar-title>
       <v-btn class="white--text" flat small @click.native.stop="logOutDialog=true" >Logout</v-btn>
     </v-toolbar>
     
