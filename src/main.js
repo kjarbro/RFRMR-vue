@@ -3,12 +3,19 @@ import Vue from 'vue';
 import App from './App.vue';
 import VueFire from 'vuefire';
 import VueRouter from 'vue-router';
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
+import Vuex from 'vuex';
+
+// Pages
 import seedPage from './seedPage.vue';
-import Home from './Home.vue';
+import home from './Home.vue';
 import sproutPage from './sproutPage.vue';
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
-import Vuex from 'vuex'
+import profilePage from './profilePage.vue';
+import mySeedPage from './mySeedPage.vue';
+import mySproutPage from './mySproutPage.vue';
+import newSproutPage from './newSproutPage.vue';
+
 
 Vue.use(Vuex)
 Vue.use(Vuetify)
@@ -22,11 +29,27 @@ const routes = [
 
   {path:'/',
   name: 'homePage',
-  component: Home },
+  component: home },
 
   {path:'/sprout',
   name: 'sproutPage',
-  component: sproutPage}
+  component: sproutPage},
+
+  {path:'/user/:userId',
+  name: 'profilePage',
+  component: profilePage },
+
+  {path:'/myseeds/:userId',
+  name: 'mySeedPage',
+  component: mySeedPage },
+
+  {path:'/mySprouts/:userId',
+  name: 'mySproutPage',
+  component: mySproutPage },
+
+  {path:'/sprout/new',
+  name: 'newSproutPage',
+  component: newSproutPage },
 ];
 
 const router = new VueRouter({

@@ -1,26 +1,27 @@
 <template>
-  <div id = 'seedPage'>
-      <div>
-    <!-- Submit Seed Card--> 
-        <v-card class="SeedCard">
-            <v-card-title primary-title>
-                {{currentSeed.Title}}
-            </v-card-title>
+    <div id = 'seedPage'>
+        <div>
+        <!--Seed Card--> 
+            <h1> {{currentSeed.Title}}</h1>
+            <small>{{currentSeed.Description}}</small> 
+            <v-card class="SeedCard">
+                <v-card-title primary-title>
+                    {{currentSeed.Title}}
+                </v-card-title>
 
-            <v-card-text>
-               <small>{{currentSeed.Description}}</small> 
-            </v-card-text>
+                <v-card-text>
+                <small>{{currentSeed.Description}}</small> 
+                </v-card-text>
 
-            <v-card-actions>
-                <v-btn flat @click="submitSeed()">Plant your Seed</v-btn>
-            </v-card-actions>
-        </v-card>
+                <v-card-actions>
+                    <v-btn flat @click="submitSeed()">Plant your Seed</v-btn>
+                </v-card-actions>
+            </v-card>
         </div>
-        <div></div>
+        <div>
+            
+        </div>
     </div>
-    </v-layout>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -47,7 +48,8 @@ export default {
   }, 
  mounted (currentSeed) {
     const self = this
-    var key = self.$route.params.seedId
+    //var key = self.$route.params.seedId
+    var key = self.$store.state.seedId
     var firebaseSeed = seedsRef.child(key).on("value", function(snapshot) {
         self.currentSeed = snapshot.val()
         }, function (errorObject) {

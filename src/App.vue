@@ -4,17 +4,26 @@
       fixed
       v-model="drawer"
       app>
+       <v-list-tile @click="homeRoute">
+          <v-list-tile-action>
+            <v-icon>home</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Seeds Home</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      
       <v-list dense>
-         <v-list-tile @click="">
+         <v-list-tile @click="profileRoute">
           <v-list-tile-action>
             <v-icon>contact_mail</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>User Profile</v-list-tile-title>
+            <v-list-tile-title>My Profile</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         
-        <v-list-tile @click="">
+        <v-list-tile @click="mySeedRoute">
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
@@ -23,7 +32,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile @click="">
+        <v-list-tile @click="mySproutRoute">
           <v-list-tile-action>
             <v-icon>contact_mail</v-icon>
           </v-list-tile-action>
@@ -37,7 +46,7 @@
     </v-navigation-drawer>
 
     <v-toolbar color="teal"fixed app>
-      <v-toolbar-side-icon @click.stop="handleUser"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click.stop="drawerToggle"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text">RFRMR</v-toolbar-title>
       <v-btn class="white--text" flat small @click.native.stop="logOutDialog=true" >Logout</v-btn>
     </v-toolbar>
@@ -51,7 +60,7 @@
     </v-content>
 
     <v-footer color="white" app>
-      <span class="teal--text">&copy; 2017</span>
+      <span class="teal--text"> RFRMR &copy; 2018</span>
     </v-footer>
     
     <div id="LoginDialog">
@@ -94,6 +103,7 @@
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click.native="signUpDialog = false" @click="signInDialog = true">Already Helping!</v-btn>
             <v-btn color="blue darken-1" flat @click.native="signUpDialog = false" @click="signUp(user)">Help us solve problems</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="signUpDialog = false" @click="drawerToggle">Cancel</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -161,6 +171,7 @@ export default {
   data () {
     return {
       drawer: false,
+      signedInToggle: false,
       signUpDialog: false,
       signInDialog: false,
       logOutDialog: false,
@@ -176,12 +187,14 @@ export default {
     const self = this
     firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-      self.setUser(user)
       // User is signed in.
-
+      self.setUser(user)
+      self.signedInToggle = true
+      self.userId= user.uid
     } else {
       // No user is signed in.
       console.log('No User')
+      self.signedInToggle = false
     }
 });
   },
@@ -195,6 +208,7 @@ export default {
         this.userName = ''
         this.userEmail = ''
         this.userPassword = ''
+        this.signedInToggle = true
       })
     },
     signIn (user) {
@@ -203,30 +217,42 @@ export default {
       firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
         this.userEmail = ''
         this.userPassword = ''
+        this.signedInToggle = true
       })
     },
-    handleUser (user) {
-      var user = firebase.auth().currentUser;
 
-      if (user) {
-        // User is signed in.
-        user = firebase.auth().currentUser
-          this.drawer = !this.drawer
-          console.log(this.userId)
-      } else {
-        // No user is signed in.
-        console.log('hell yeah')
-          this.signUpDialog = true
-    }},
+    drawerToggle (signedInToggle){
+      var drawer = (this.signedInToggle == true) ? this.drawer =!this.drawer : this.signUpDialog = true
+
+    },
 
     logOut (user) {
       firebase.auth().signOut().then(function() {
         // Sign-out successful.
-        console.log('signed out')
+        this.signedInToggle = false
 
       }).catch(function(error) {
         // An error happened.
       });
+    },
+    homeRoute (){
+      this.$router.push({name: 'homePage'})
+      
+    },
+    profileRoute (){
+       var userId = this.userId
+      this.$router.push({name: 'profilePage', params: { userId }})
+      
+    },
+    mySeedRoute (){
+      var userId = this.userId
+      this.$router.push({name: 'mySeedPage', params: { userId }})
+      
+    },
+    mySproutRoute (){
+      var userId = this.userId
+      this.$router.push({name: 'mySproutPage', params: { userId }})
+      
     },
     ...mapMutations(['setUser']),
   }

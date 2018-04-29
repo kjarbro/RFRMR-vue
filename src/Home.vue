@@ -42,7 +42,7 @@
                             <v-card-actions>
                                 <v-btn flat @click="showSeed(seed['.key'])">Show</v-btn>
                                 <v-btn flat @click="deleteSeed(seed['.key'])">Delete</v-btn>
-                                <v-btn flat @click="setEditSeed(seed['.key'])" @click.native.stop="dialog=true">Edit</v-btn>
+                                <v-btn flat @click="setEditSeed(seed['.key'])" @click.native.stop="Editdialog=true">Edit</v-btn>
                                 <v-spacer></v-spacer>
                                 <v-btn icon @click.native="setActiveSeed(seed['.key'])">
                                     <v-icon>{{ activeSeedKey == seed['.key'] ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
@@ -59,7 +59,7 @@
                 </div>
                 <!-- Seed Cards Edit-->
                 <div v-else>
-                    <v-dialog v-model="dialog" persistent max-width="500px">
+                    <v-dialog v-model="Editdialog" persistent max-width="500px">
                         <v-card class="SeedCard">
                             <v-card-title>
                                 <span class="headline">Edit Seed</span>
@@ -78,8 +78,8 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" flat @click.native= "dialog = false" @click="cancelEdit(seed['.key'])">Cancel</v-btn>
-                                <v-btn color="blue darken-1" flat @click.native= "dialog = false" @click="saveEdit(seed)">Save</v-btn>
+                                <v-btn color="blue darken-1" flat @click.native= "Editdialog = false" @click="cancelEdit(seed['.key'])">Cancel</v-btn>
+                                <v-btn color="blue darken-1" flat @click.native= "Editdialog = false" @click="saveEdit(seed)">Save</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -103,7 +103,7 @@ export default {
       seedTitle: '',
       seedDescription: '',
       activeSeedKey: '',
-      dialog: false,
+      Editdialog: false,
       seedCategory:'',
       userId: '',
     };
@@ -117,10 +117,17 @@ export default {
         this.activeSeedKey = (this.activeSeedKey == key) ? '' : key
     },
     submitSeed(user){
-    
-        seedsRef.push({Title: this.seedTitle, Description: this.seedDescription, Category: this.seedCategory, UserID: this.user.uid , edit:false})
-        this.seedTitle =''
-        this.seedDescription =''
+        var self = this
+        var user = self.$store.state.user
+        if (user){
+            seedsRef.push({Title: this.seedTitle, Description: this.seedDescription, Category: this.seedCategory, UserID: this.user.uid , edit:false})
+            this.seedTitle =''
+            this.seedDescription =''}
+        else {
+            //self.signUpDialog = true 
+            console.log('You need to sign in!')
+
+        }
     },
     setEditSeed(key){
       seedsRef.child(key).update({edit: true})
@@ -139,7 +146,6 @@ export default {
         const self = this
         var seedId = seedsRef.child(key).key
         self.setSeedId(seedId)
-        console.log(self.setSeedId)
         self.$router.push({name: 'seedPage', params: { seedId }})
 
 
