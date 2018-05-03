@@ -41,8 +41,9 @@
                             <small class = "seedCard"> by: {{seed.UserID}}</small>
                             <v-card-actions>
                                 <v-btn flat @click="showSeed(seed['.key'])">Show</v-btn>
-                                <v-btn flat @click="deleteSeed(seed['.key'])">Delete</v-btn>
+                                <!-- <v-btn flat @click="deleteSeed(seed['.key'])">Delete</v-btn>
                                 <v-btn flat @click="setEditSeed(seed['.key'])" @click.native.stop="Editdialog=true">Edit</v-btn>
+                                --> 
                                 <v-spacer></v-spacer>
                                 <v-btn icon @click.native="setActiveSeed(seed['.key'])">
                                     <v-icon>{{ activeSeedKey == seed['.key'] ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
@@ -145,6 +146,7 @@ export default {
     showSeed (key){
         const self = this
         var seedId = seedsRef.child(key).key
+        console.log(seedId)
         self.setSeedId(seedId)
         self.$router.push({name: 'seedPage', params: { seedId }})
 
@@ -155,7 +157,7 @@ export default {
   },
   computed: {
       ...mapState(['user']),
-      ...mapState(['seed'])
+      ...mapState(['seedId'])
   }
 }
 </script>
