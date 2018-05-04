@@ -4,28 +4,37 @@
       fixed
       v-model="drawer"
       app>
-      <v-list dense>
-         <v-list-tile @click="">
+       <v-list-tile @click="homeRoute">
           <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
+            <v-icon>fas fa-home</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>User Profile</v-list-tile-title>
+            <v-list-tile-title>Seeds Home</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      
+      <v-list dense>
+         <v-list-tile @click="profileRoute">
+          <v-list-tile-action>
+            <v-icon>fas fa-user-astronaut</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>My Profile</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         
-        <v-list-tile @click="">
+        <v-list-tile @click="mySeedRoute">
           <v-list-tile-action>
-            <v-icon>home</v-icon>
+            <v-icon>fas fa-seedling</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>My Seeds</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile @click="">
+        <v-list-tile @click="mySproutRoute">
           <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
+            <v-icon>fab fa-pagelines</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>My Sprouts</v-list-tile-title>
@@ -37,8 +46,8 @@
     </v-navigation-drawer>
 
     <v-toolbar color="teal"fixed app>
-      <v-toolbar-side-icon @click.stop="handleUser"></v-toolbar-side-icon>
-      <v-toolbar-title class="white--text" v-bind:to="'home'">RFRMR</v-toolbar-title>
+      <v-toolbar-side-icon @click.stop="drawerToggle"></v-toolbar-side-icon>
+      <v-toolbar-title class="white--text">RFRMR</v-toolbar-title>
       <v-btn class="white--text" flat small @click.native.stop="logOutDialog=true" >Logout</v-btn>
     </v-toolbar>
     
@@ -51,7 +60,7 @@
     </v-content>
 
     <v-footer color="white" app>
-      <span class="teal--text">&copy; 2017</span>
+      <span class="teal--text"> RFRMR &copy; 2018</span>
     </v-footer>
     
     <div id="LoginDialog">
@@ -94,6 +103,7 @@
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click.native="signUpDialog = false" @click="signInDialog = true">Already Helping!</v-btn>
             <v-btn color="blue darken-1" flat @click.native="signUpDialog = false" @click="signUp(user)">Help us solve problems</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="signUpDialog = false" @click="drawerToggle">Cancel</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -154,38 +164,41 @@
 
 <script>
 import firebase from 'firebase'
+import {mapMutations} from 'vuex'
+import {mapState} from 'vuex'
 
 export default {
   data () {
     return {
       drawer: false,
-      signedInUser : firebase.auth().currentUser,
+      signedInToggle: false,
       signUpDialog: false,
       signInDialog: false,
       logOutDialog: false,
       userName: '',
       userEmail: '',
       userPassword:'',
-      user: '',
+      userId:'',
     };
   },
   
   mounted () {
-    var user = firebase.auth().currentUser;
-
+    const user = firebase.auth().currentUser;
+    const self = this
     firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       // User is signed in.
-      user = firebase.auth().currentUser
-      console.log('history')
-      console.log(user)
+      self.setUser(user)
+      self.signedInToggle = true
+      self.userId= user.uid
     } else {
       // No user is signed in.
-      console.log('herstory')
-      user = firebase.auth().currentUser
+      console.log('No User')
+      self.signedInToggle = false
     }
 });
   },
+  computed : mapState(['user']),
   methods : {
     signUp (user) {
       var name = this.userName
@@ -195,6 +208,7 @@ export default {
         this.userName = ''
         this.userEmail = ''
         this.userPassword = ''
+        this.signedInToggle = true
       })
     },
     signIn (user) {
@@ -203,31 +217,44 @@ export default {
       firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
         this.userEmail = ''
         this.userPassword = ''
-         
+        this.signedInToggle = true
       })
     },
-    handleUser (user) {
-      var user = firebase.auth().currentUser;
 
-      if (user) {
-        // User is signed in.
-        user = firebase.auth().currentUser
-          this.drawer = !this.drawer
-      } else {
-        // No user is signed in.
-        console.log('hell yeah')
-          this.signUpDialog = true
-    }},
+    drawerToggle (signedInToggle){
+      var drawer = (this.signedInToggle == true) ? this.drawer =!this.drawer : this.signUpDialog = true
+
+    },
 
     logOut (user) {
       firebase.auth().signOut().then(function() {
         // Sign-out successful.
-        console.log('signed out')
+        this.signedInToggle = false
 
       }).catch(function(error) {
         // An error happened.
       });
-    }
+    },
+    homeRoute (){
+      this.$router.push({name: 'homePage'})
+      
+    },
+    profileRoute (){
+       var userId = this.userId
+      this.$router.push({name: 'profilePage', params: { userId }})
+      
+    },
+    mySeedRoute (){
+      var userId = this.userId
+      this.$router.push({name: 'mySeedPage', params: { userId }})
+      
+    },
+    mySproutRoute (){
+      var userId = this.userId
+      this.$router.push({name: 'mySproutPage', params: { userId }})
+      
+    },
+    ...mapMutations(['setUser']),
   }
 }
 
