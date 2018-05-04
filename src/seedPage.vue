@@ -11,6 +11,12 @@
                 <small>{{currentSeed.Description}}</small> 
                 </v-card-text>
 
+                <v-btn flat @click="createSprout()">
+                    <v-icon>fab fa-pagelines</v-icon> 
+                    Create Sprout
+
+                    </v-btn>
+
             </v-card>
             <v-card class="CommentCard">
                 <v-card-title primary-title>
@@ -117,7 +123,19 @@ export default {
        
         
     },
-     
+    setEditComment(key){
+      seedsRef.child(key).update({edit: true})
+    },
+    deleteComment(key){
+      seedsRef.child(key).remove();
+    },
+    saveEdit(seed){
+      const key = seed['.key']
+      seedsRef.child(key).set({Title: seed.Title, Description: seed.Description , edit: false, dialog: false})
+    },
+    cancelEdit(key){
+      seedsRef.child(key).update({edit: false, dialog: false})
+    },
     // },
     ...mapMutations(['setUser']),
     ...mapMutations(['setSeedId'])

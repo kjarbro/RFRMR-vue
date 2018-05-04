@@ -6,7 +6,7 @@
       app>
        <v-list-tile @click="homeRoute">
           <v-list-tile-action>
-            <v-icon>home</v-icon>
+            <v-icon>fas fa-home</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Seeds Home</v-list-tile-title>
@@ -16,7 +16,7 @@
       <v-list dense>
          <v-list-tile @click="profileRoute">
           <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
+            <v-icon>fas fa-user-astronaut</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>My Profile</v-list-tile-title>
@@ -25,7 +25,7 @@
         
         <v-list-tile @click="mySeedRoute">
           <v-list-tile-action>
-            <v-icon>home</v-icon>
+            <v-icon>fas fa-seedling</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>My Seeds</v-list-tile-title>
@@ -34,7 +34,7 @@
 
         <v-list-tile @click="mySproutRoute">
           <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
+            <v-icon>fab fa-pagelines</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>My Sprouts</v-list-tile-title>
