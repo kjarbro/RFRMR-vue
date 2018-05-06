@@ -1,5 +1,21 @@
 <template>
   <div id = 'home'>
+    <v-toolbar color="teal accent-2">
+        <v-toolbar-title class="grey-darken-3--text">Seeds Home</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon>
+            <v-icon>search</v-icon>
+        </v-btn>
+        <v-select
+            :items="categories"
+            v-model="selectedCategory"
+            label="Filter Category"
+            multiple
+            chips
+            autocomplete
+            
+        ></v-select>
+    </v-toolbar>
     <!-- Submit Seed Card--> 
         <v-card class="SeedCard">
             <v-card-title primary-title>
@@ -21,13 +37,15 @@
                 multiple
                 autocomplete
                 chips
-                :items="['Arts & Entertainment', 'Automotive & Vehicle','Beauty & Fitness','Business & Industrial','Computers & Technology','Education and Employment','Food & Drink','Home & Garden','Law & Government','Leisure & Hobbies','News','Science','Shopping','Sports','Sexuality','Philosophy','Travel','Video Games',]"
+                :items= "categories"
             ></v-select>
             <v-card-actions>
-                <v-btn flat @click="submitSeed()">Plant your Seed</v-btn>
+                <v-btn class="button" flat @click="submitSeed()">Plant your Seed 
+                     <v-icon>fas fa-seedling</v-icon>
+                </v-btn>
             </v-card-actions>
         </v-card>
-     <div >
+    <div >
      <v-layout class="grid">
           <!-- Seed Cards -->
             <div v-for="seed in seeds" :key="seed.id" >
@@ -38,12 +56,13 @@
                                 <div class="headline">{{seed.Title}}</div>
                             </v-card-title>
                             <br>
-                            <small class = "seedCard"> by: {{seed.UserID}}</small>
+                            <v-card-text><small class = "seedCard"> by: {{seed.UserID}}</small></v-card-text>
+                            
                             <v-card-actions>
                                 <v-btn flat @click="showSeed(seed['.key'])">Show</v-btn>
-                                < <v-btn flat @click="deleteSeed(seed['.key'])">Delete</v-btn>
+                                <!-- <v-btn flat @click="deleteSeed(seed['.key'])">Delete</v-btn>
                                 <v-btn flat @click="setEditSeed(seed['.key'])" @click.native.stop="Editdialog=true">Edit</v-btn>
-                                
+                                 -->
                                 <v-spacer></v-spacer>
                                 <v-btn icon @click.native="setActiveSeed(seed['.key'])">
                                     <v-icon>{{ activeSeedKey == seed['.key'] ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
@@ -53,8 +72,11 @@
                             <!--<v-slide-y-transition>-->
                                 <v-card-text v-if="activeSeedKey == seed['.key']">
                                     {{seed.Description}}
-                                    
+                                    <div v-for="category in seed.Category" :key="category">
+                                        <v-chip>{{category}}</v-chip>
+                                    </div>
                                 </v-card-text>
+                               
                             <!-- </v-slide-y-transition> -->
                         </v-card>
                 </div>
@@ -101,12 +123,32 @@ import {mapState} from 'vuex'
 export default {
   data () {
     return {
-      seedTitle: '',
-      seedDescription: '',
-      activeSeedKey: '',
-      Editdialog: false,
-      seedCategory:'',
-      userId: '',
+        seedTitle: '',
+        seedDescription: '',
+        activeSeedKey: '',
+        Editdialog: false,
+        seedCategory:'',
+        userId: '',
+        categories: ['Arts & Entertainment', 
+        'Automotive & Vehicle',
+        'Beauty & Fitness',
+        'Business & Industrial',
+        'Computers & Technology',
+        'Education and Employment',
+        'Food & Drink',
+        'Home & Garden',
+        'Law & Government',
+        'Leisure & Hobbies',
+        'News',
+        'Science',
+        'Shopping',
+        'Sports',
+        'Sexuality',
+        'Philosophy',
+        'Travel',
+        'Video Games',],
+        selectedCategory:''
+            
     };
   },
   firebase: {
@@ -123,11 +165,12 @@ export default {
         if (user){
             seedsRef.push({Title: this.seedTitle, Description: this.seedDescription, Category: this.seedCategory, UserID: this.user.uid , edit:false})
             this.seedTitle =''
-            this.seedDescription =''}
+            this.seedDescription =''
+            this.seedCategory= ['']
+            }
         else {
             //self.signUpDialog = true 
             console.log('You need to sign in!')
-
         }
     },
     setEditSeed(key){
@@ -149,9 +192,11 @@ export default {
         console.log(seedId)
         self.setSeedId(seedId)
         self.$router.push({name: 'seedPage', params: { seedId }})
-
+    },
+    filterSeeds(){
 
     },
+
     ...mapMutations(['setUser']),
     ...mapMutations(['setSeedId'])
   },
@@ -195,8 +240,12 @@ a {
     margin: 20px 20px;
 }
 
+.button{
+    margin: 20px 20px;
+}
+
 .grid {
-    display: grid;
+    display: grid;;
     grid-column-start: 10px;
     grid-template-columns: repeat(3, 3fr);
     grid-gap: 20px;

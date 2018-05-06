@@ -39,7 +39,10 @@
                                 <div class="headline">{{seed.Title}}</div>
                             </v-card-title>
                             <br>
-                            <small class = "seedCard"> by: {{seed.UserID}}</small>
+                            <v-card-text>
+                                <small class = "seedCard"> by: {{seed.UserID}}</small>
+                            </v-card-text>
+                            
                             <v-card-actions>
                                 <v-btn flat @click="showSeed(seed['.key'])">Show</v-btn>
                                 <v-btn flat @click="deleteSeed(seed['.key'])">Delete</v-btn>
@@ -199,7 +202,7 @@ a {
 }
 
 .grid {
-    display: grid;
+    display:-ms-grid;
     grid-column-start: 10px;
     grid-template-columns: repeat(3, 3fr);
     grid-gap: 20px;

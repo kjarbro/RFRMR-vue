@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar color="teal" dark tabs>
+    <v-toolbar color="#42b983" dark tabs>
       <v-toolbar-title>{{sproutName}}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-tabs
