@@ -11,3 +11,4 @@ const app = initializeApp({
 
 export const db = app.database();
 export const seedsRef = db.ref('seeds');
+export const sproutsRef = db.ref('sprouts');

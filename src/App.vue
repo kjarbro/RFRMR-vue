@@ -45,10 +45,10 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-toolbar color="teal"fixed app>
+    <v-toolbar color="teal accent-2"fixed app>
       <v-toolbar-side-icon @click.stop="drawerToggle"></v-toolbar-side-icon>
-      <v-toolbar-title class="white--text">RFRMR</v-toolbar-title>
-      <v-btn class="white--text" flat small @click.native.stop="logOutDialog=true" >Logout</v-btn>
+      <v-toolbar-title class="grey-darken-3--text">RFRMR</v-toolbar-title>
+      <v-btn class="grey-darken-3--text" flat small @click.native.stop="logOutDialog=true" >Logout</v-btn>
     </v-toolbar>
     
     <v-content>
@@ -89,11 +89,21 @@
                   required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field 
+                  <!-- <v-text-field 
                   v-model = "userPassword" 
                   type="password" 
                   label = "Password"
-                  required></v-text-field>
+                  required></v-text-field> -->
+                  <v-text-field
+                    label="Enter your password"
+                    hint="At least 8 characters"
+                    v-model="userPassword"
+                    min="8"
+                    :append-icon="e1 ? 'visibility' : 'visibility_off'"
+                    :append-icon-cb="() => (e1 = !e1)"
+                    :type="e1 ? 'password' : 'text'"
+                    counter
+                   ></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -175,10 +185,12 @@ export default {
       signUpDialog: false,
       signInDialog: false,
       logOutDialog: false,
+      e1: false,
       userName: '',
       userEmail: '',
       userPassword:'',
       userId:'',
+
     };
   },
   

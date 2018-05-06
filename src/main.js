@@ -18,7 +18,15 @@ import newSproutPage from './newSproutPage.vue';
 
 
 Vue.use(Vuex)
-Vue.use(Vuetify)
+Vue.use(Vuetify,{
+  theme: {
+    primary: '#64FFDA',
+    secondary: '#C0CA33',
+    accent: '#8c9eff',
+    text: '#616161',
+    error: '#b71c1c'
+  }
+} )
 Vue.use(VueFire);
 Vue.use(VueRouter);
 

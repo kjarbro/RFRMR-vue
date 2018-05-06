@@ -1,39 +1,50 @@
 <template>
     <div id = 'seedPage'>
-        <div>
         <!--Seed Card--> 
-            <v-card>
-                <v-card-title primary-title>
-                    {{currentSeed.Title}}
-                </v-card-title>
+        <v-card>
+            <v-card-title primary-title>
+                {{currentSeed.Title}}
+            </v-card-title>
 
-                <v-card-text>
-                <small>{{currentSeed.Description}}</small> 
-                </v-card-text>
-
-                <v-btn flat @click="createSprout()">
-                    <v-icon>fab fa-pagelines</v-icon> 
+            <v-card-text>
+            <small>{{currentSeed.Description}}</small> 
+            
+            </v-card-text>
+            <!-- <v-tooltip> -->
+                <v-btn flat @click="setSproutSeed(currentSeed['.key'])" @click.native.stop="newSproutDialog=true">
                     Create Sprout
-
+                    <v-icon right>fab fa-pagelines</v-icon> 
+                </v-btn>
+            <span>Sprouts allow you to organize your team so that you can more effectively solve problems.</span>
+            <!-- </v-tooltip> -->
+            <v-tooltip right>
+                <v-btn 
+                    color="primary" 
+                    slot="activator" 
+                    @click="setSproutSeed(currentSeed['.key'])" 
+                    @click.native.stop="newSproutDialog=true"> 
+                    Create Sprout
+                    <v-icon right>fab fa-pagelines</v-icon> 
                     </v-btn>
-
-            </v-card>
-            <v-card class="CommentCard">
-                <v-card-title primary-title>
-                    <div>
-                        <div class="headline">Post a Comment</div>
-                    </div>
-                </v-card-title>
-                <v-text-field
-                    v-model="seedComment"
-                    label="Your comment here."
-                ></v-text-field>
-                <v-card-actions>
-                    <v-btn flat @click="submitSeedComment()">Post Comment</v-btn>
-                </v-card-actions>
-            </v-card>
-        </div>
-         <div>
+                <span>Sprouts allow you to organize your team so that you can more effectively solve problems.</span>
+                </v-tooltip>
+        </v-card>
+        <v-card class="CommentCard">
+            <v-card-title primary-title>
+                <div>
+                    <div class="headline">Post a Comment</div>
+                </div>
+            </v-card-title>
+            <v-text-field
+                v-model="seedComment"
+                label="Your comment here."
+            ></v-text-field>
+            <v-card-actions>
+                <v-btn flat @click="submitSeedComment()">Post Comment</v-btn>
+            </v-card-actions>
+        </v-card>
+        
+        <div>
             <div v-for="comment in currentSeed.Comments" :key="comment.id" >
                 <!-- Seed Card no edit -->
                 <div v-if="!comment.edit">
@@ -72,6 +83,92 @@
                         </v-card>
                     </v-dialog>
                 </div>
+        </div>
+        <div>
+            <v-dialog
+                v-model="newSproutDialog"
+                fullscreen
+                hide-overlay
+                transition="dialog-bottom-transition"
+                scrollable
+                >
+                <v-card tile>
+                    <v-toolbar card color="teal accent-2">
+                        <v-btn icon @click.native="newSproutDialog = false" dark>
+                            <v-icon>close</v-icon>
+                        </v-btn>
+                        <v-toolbar-title>Create Your Sprout</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-toolbar-items>
+                        <!-- <v-btn dark flat @click.native="newSproutDialog = false" @click="saveSprout">Save</v-btn> -->
+                        </v-toolbar-items>
+                        <v-menu bottom right offset-y>
+                        </v-menu>
+                    </v-toolbar>
+
+                    <v-card-text>
+                        <v-list three-line subheader>
+                            <v-subheader>Sprout Name</v-subheader>
+                                <v-flex xs8>
+                                    <v-text-field
+                                    name="sproutName"
+                                    label="Sprout Name"
+                                    > </v-text-field>
+                                </v-flex>
+                                <v-flex xs8>
+                                    <v-text-field
+                                    name="sproutDescription"
+                                    label="Describe your Sprout"
+                                    ></v-text-field>
+                                </v-flex>
+                            <v-menu
+                                offset-x
+                                :close-on-content-click="false"
+                                :nudge-width="200"
+                                v-model="accessMenu"
+                                >
+                                <v-btn color="teal accent-2" slot="activator">Sprout user access permited...</v-btn>
+                                <v-card>
+                                    <v-radio-group v-model="userAccess">
+                                        <v-radio
+                                            label="by Invite"
+                                            color="teal accent-2"
+                                            value="byInvite">    
+                                        </v-radio>
+                                        <v-radio
+                                            label="by Request"
+                                            color="teal accent-2"
+                                            value="byRequest">
+                                        </v-radio>
+                                        <v-radio
+                                            label="by Existence"
+                                            color="teal accent-2"
+                                            value="byExistence">
+                                        </v-radio>
+                                    </v-radio-group>
+
+                                    <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat @click="accessMenu = false">Cancel</v-btn>
+                                    <v-btn color="primary" flat @click="accessMenu = false">Save</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-menu>
+                            <v-tooltip right>
+                            <v-btn color="teal accent-2"  slot="activator">Submit Your Sprout</v-btn>
+                            Each sprout allows you to organize your team so that you can more effectively solve problems.
+                            </v-tooltip>
+                            
+                        </v-list>
+                    </v-card-text>
+
+                     <div style="flex: 1 1 auto;"></div>
+                    </v-card>
+                    
+                   
+                   
+      
+      </v-dialog>
             </div>
         </div>
     </div>
@@ -80,6 +177,7 @@
 <script>
 import firebase from './firebase'
 import {seedsRef} from './firebase'
+import {sproutsRef} from './firebase'
 import {mapMutations} from 'vuex'
 import {mapState} from 'vuex'
 
@@ -88,14 +186,22 @@ export default {
   data () {
     return {
       seedComment: '',
-      dialog: false,
+      newSproutDialog: false,
+    //   byInvite: false,
+    //   byRequest: false,
+    //   byExistence: false,
+      accessMenu: false,
+      userAccess: '',
       UserId: '',
       currentSeed: '',
       key: '',
+
+      
     };
   },
   firebase: {
     seeds: seedsRef,
+    sprouts: sproutsRef
   }, 
  mounted (currentSeed) {
     const self = this
@@ -111,6 +217,27 @@ export default {
         })
     },
   methods: {
+       submitSprout(user, key){
+        var self = this
+        var user = self.$store.state.user
+        if (user){
+            seedsRef.push({Title: this.sproutTitle, 
+            Description: this.sproutDescription, 
+            Category: this.seedCategory, 
+            UserID: this.user.uid, 
+            edit:false
+            })
+            
+            
+            this.seedTitle =''
+            this.seedDescription =''
+            this.seedCategory= ['']
+            }
+        else {
+            //self.signUpDialog = true 
+            console.log('You need to sign in!')
+        }
+    },
     submitSeedComment(user, key){
         const self = this
         //var key = self.$store.state.seedId
@@ -119,9 +246,7 @@ export default {
         console.log(seedsRef.child(key).child('/Comments'))
         console.log(key)
         seedsRef.child(key).child('/Comments').push({Comment: self.seedComment, UserId: self.user.uid, edit:false})
-        this.seedComment =''
-       
-        
+        this.seedComment ='' 
     },
     setEditComment(key){
       seedsRef.child(key).update({edit: true})
@@ -136,6 +261,11 @@ export default {
     cancelEdit(key){
       seedsRef.child(key).update({edit: false, dialog: false})
     },
+    setSproutSeed(key) {
+        
+    },
+    // inviteSelector {
+
     // },
     ...mapMutations(['setUser']),
     ...mapMutations(['setSeedId'])
@@ -147,37 +277,46 @@ export default {
 }
 </script>
 
+
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+    #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+    }
 
-h1, h2 {
-  font-weight: normal;
-}
+    h1, h2 {
+    font-weight: normal;
+    }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+    ul {
+    list-style-type: none;
+    padding: 0;
+    }
 
-li {
-  
-  margin: 0 20px;
-}
-
-a {
-  color: #42b983;
-}
-
-.CommentCard{
-    padding: 20px 40px; 
+    li {
     
-}
+    margin: 0 20px;
+    }
+
+    a {
+    color: #42b983;
+    }
+
+    .CommentCard{
+        padding: 20px 40px; 
+        
+    }
 
 </style>
+
+
+
+
+
+<div class="text-xs-center">
+  
+  </div>
