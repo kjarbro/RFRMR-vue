@@ -1,13 +1,13 @@
 <template>
     <div id = 'seedPage'>
         <!--Seed Card--> 
-        <v-card>
-            <v-card-title primary-title>
-                {{currentSeed.Title}}
+        <v-card class="SeedCard">
+            <v-card-title primary-title.display-4>
+               <h1> {{currentSeed.Title}} </h1>
             </v-card-title>
 
             <v-card-text>
-            <small>{{currentSeed.Description}}</small> 
+            {{currentSeed.Description}}
             
             </v-card-text>
             <v-tooltip right>
@@ -303,13 +303,11 @@ export default {
         padding: 20px 40px; 
         
     }
+    .SeedCard{
+    padding: 20px 40px; 
+    width: 1200px; 
+    margin: 20px 40px;
+
+}
 
 </style>
-
-
-
-
-
-<div class="text-xs-center">
-  
-  </div>
