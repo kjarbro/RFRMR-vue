@@ -39,7 +39,7 @@ const routes = [
   name: 'homePage',
   component: home },
 
-  {path:'/sprout',
+  {path:'/sprout/:sproutId',
   name: 'sproutPage',
   component: sproutPage},
 

@@ -10,13 +10,6 @@
             <small>{{currentSeed.Description}}</small> 
             
             </v-card-text>
-            <!-- <v-tooltip> -->
-                <v-btn flat @click="setSproutSeed(currentSeed['.key'])" @click.native.stop="newSproutDialog=true">
-                    Create Sprout
-                    <v-icon right>fab fa-pagelines</v-icon> 
-                </v-btn>
-            <span>Sprouts allow you to organize your team so that you can more effectively solve problems.</span>
-            <!-- </v-tooltip> -->
             <v-tooltip right>
                 <v-btn 
                     color="primary" 
@@ -24,8 +17,7 @@
                     @click="setSproutSeed(currentSeed['.key'])" 
                     @click.native.stop="newSproutDialog=true"> 
                     Create Sprout
-                    <v-icon right>fab fa-pagelines</v-icon> 
-                    </v-btn>
+                    <v-icon right>fab fa-pagelines</v-icon> </v-btn>
                 <span>Sprouts allow you to organize your team so that you can more effectively solve problems.</span>
                 </v-tooltip>
         </v-card>
@@ -77,8 +69,8 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" flat @click.native= "Editdialog = false" @click="cancelEdit(seed['.key'])">Cancel</v-btn>
-                                <v-btn color="blue darken-1" flat @click.native= "Editdialog = false" @click="saveEdit(seed)">Save</v-btn>
+                                <v-btn color="teal accent-2" flat @click.native= "Editdialog = false" @click="cancelEdit(seed['.key'])">Cancel</v-btn>
+                                <v-btn color="teal accent-2" flat @click.native= "Editdialog = false" @click="saveEdit(seed)">Save</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -94,7 +86,7 @@
                 >
                 <v-card tile>
                     <v-toolbar card color="teal accent-2">
-                        <v-btn icon @click.native="newSproutDialog = false" dark>
+                        <v-btn icon @click.native="newSproutDialog = false">
                             <v-icon>close</v-icon>
                         </v-btn>
                         <v-toolbar-title>Create Your Sprout</v-toolbar-title>
@@ -108,22 +100,21 @@
 
                     <v-card-text>
                         <v-list three-line subheader>
-                            <v-subheader>Sprout Name</v-subheader>
                                 <v-flex xs8>
                                     <v-text-field
-                                    name="sproutName"
+                                    v-model="sproutTitle"
                                     label="Sprout Name"
                                     > </v-text-field>
                                 </v-flex>
                                 <v-flex xs8>
                                     <v-text-field
-                                    name="sproutDescription"
+                                    v-model="sproutDescription"
                                     label="Describe your Sprout"
                                     ></v-text-field>
                                 </v-flex>
                             <v-menu
                                 offset-x
-                                :close-on-content-click="false"
+                                :close-on-content-click="true"
                                 :nudge-width="200"
                                 v-model="accessMenu"
                                 >
@@ -146,22 +137,20 @@
                                             value="byExistence">
                                         </v-radio>
                                     </v-radio-group>
-
-                                    <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn flat @click="accessMenu = false">Cancel</v-btn>
-                                    <v-btn color="primary" flat @click="accessMenu = false">Save</v-btn>
-                                    </v-card-actions>
                                 </v-card>
                             </v-menu>
-                            <v-tooltip right>
-                            <v-btn color="teal accent-2"  slot="activator">Submit Your Sprout</v-btn>
-                            Each sprout allows you to organize your team so that you can more effectively solve problems.
-                            </v-tooltip>
+                            <v-flex>
+                                <v-btn  color="teal accent-2"  
+                                    slot="activator" 
+                                    @click="submitSprout()">
+                                    Submit Your Sprout
+                                </v-btn> 
+                            </v-flex>
                             
                         </v-list>
                     </v-card-text>
-
+                     
+                  
                      <div style="flex: 1 1 auto;"></div>
                     </v-card>
                     
@@ -191,6 +180,8 @@ export default {
     //   byRequest: false,
     //   byExistence: false,
       accessMenu: false,
+      sproutTitle: '',
+      sproutDescription: '',
       userAccess: '',
       UserId: '',
       currentSeed: '',
@@ -221,17 +212,19 @@ export default {
         var self = this
         var user = self.$store.state.user
         if (user){
-            seedsRef.push({Title: this.sproutTitle, 
+            sproutsRef.push({Title: this.sproutTitle, 
             Description: this.sproutDescription, 
-            Category: this.seedCategory, 
-            UserID: this.user.uid, 
+            // Category: this.seedCategory, 
+            OwnerId: this.user.uid,
+            MemberId: [''],
+            ParentSeed: this.key,
+            PrivacyType: this.userAccess,  
             edit:false
             })
-            
-            
-            this.seedTitle =''
-            this.seedDescription =''
-            this.seedCategory= ['']
+            this.sproutTitle =''
+            this.sproutDescription =''
+            //self.$router.push({name: 'sproutPage', params: { sproutId }})
+            this.newSproutDialog = false
             }
         else {
             //self.signUpDialog = true 
