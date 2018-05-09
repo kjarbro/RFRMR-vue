@@ -111,8 +111,19 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="signUpDialog = false" @click="signInDialog = true">Already Helping!</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="signUpDialog = false" @click="signUp(user)">Help us solve problems</v-btn>
+            <v-btn 
+              color="blue darken-1" 
+              flat 
+              @click.native="signUpDialog = false" 
+              @click="signInDialog = true">
+              Already Helping!
+            </v-btn>
+            <v-btn 
+              color="blue darken-1" 
+              flat @click.native="signUpDialog = false" 
+              @click="signUp(user)">
+              Help us solve problems
+            </v-btn>
             <v-btn color="blue darken-1" flat @click.native="signUpDialog = false" @click="drawerToggle">Cancel</v-btn>
           </v-card-actions>
         </v-card>
@@ -216,11 +227,13 @@ export default {
       var name = this.userName
       var email = this.userEmail
       var password = this.userPassword
+      var displayName = this.userName
       firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
         this.userName = ''
         this.userEmail = ''
         this.userPassword = ''
         this.signedInToggle = true
+        
       })
     },
     signIn (user) {

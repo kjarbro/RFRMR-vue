@@ -39,8 +39,11 @@
                 chips
                 :items= "categories"
             ></v-select>
+             <v-alert :value="notSignedIn" type="warning">
+                    You have to be signed in to do that.
+            </v-alert>
             <v-card-actions>
-                <v-btn class="button" flat @click="submitSeed()">Plant your Seed 
+                <v-btn  class="button" @click="submitSeed()" light color="primary" >Plant your Seed 
                      <v-icon>fas fa-seedling</v-icon>
                 </v-btn>
             </v-card-actions>
@@ -115,7 +118,8 @@
   
   
 <script>
-import firebase from './firebase'
+import firebase from 'firebase'
+import app from './App.vue'
 import {seedsRef} from './firebase'
 import {mapMutations} from 'vuex'
 import {mapState} from 'vuex'
@@ -128,6 +132,7 @@ export default {
         seedDescription: '',
         activeSeedKey: '',
         Editdialog: false,
+        notSignedIn: false,
         seedCategory:'',
         userId: '',
         categories: ['Arts & Entertainment', 
@@ -162,16 +167,18 @@ export default {
     },
     submitSeed(user){
         var self = this
-        var user = self.$store.state.user
+        var user = firebase.auth().currentUser
         if (user){
             seedsRef.push({Title: this.seedTitle, Description: this.seedDescription, Category: this.seedCategory, UserID: this.user.uid , edit:false})
             this.seedTitle =''
             this.seedDescription =''
             this.seedCategory= ['']
+            self.notSignedIn = false
             }
         else {
-            //self.signUpDialog = true 
+            var notSignedIn = self.notSignedIn
             console.log('You need to sign in!')
+            self.notSignedIn = true
         }
     },
     setEditSeed(key){
@@ -193,6 +200,7 @@ export default {
         console.log(seedId)
         self.setSeedId(seedId)
         self.$router.push({name: 'seedPage', params: { seedId }})
+
     },
     filterSeeds(){
 

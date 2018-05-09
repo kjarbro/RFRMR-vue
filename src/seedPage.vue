@@ -181,7 +181,7 @@
 </template>
 
 <script>
-import firebase from './firebase'
+import firebase from 'firebase'
 import {seedsRef} from './firebase'
 import {sproutsRef} from './firebase'
 import {mapMutations} from 'vuex'
