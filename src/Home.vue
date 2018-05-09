@@ -9,16 +9,12 @@
 
     <!-- Submit Seed Card--> 
     <v-card class="SeedCard">
-      <v-card-title primary-title>
-        <div><div class="headline">What problem do you want to solve today?</div></div>
-      </v-card-title>
+      <v-card-title primary-title><div><div class="headline">What problem do you want to solve today?</div></div></v-card-title>
       <v-text-field v-model="seedTitle" label="Name your Seed"></v-text-field>
       <v-text-field v-model="seedDescription" label="Describe the problem you wish to solve"></v-text-field>
       <v-select label="Categories"v-model="seedCategory"multiple autocomplete chips :items= "categories"></v-select>
       <v-card-actions>
-        <v-btn class="button" flat @click="submitSeed()">Plant your Seed 
-           <v-icon>fas fa-seedling</v-icon>
-        </v-btn>
+        <v-btn class="button" flat @click="submitSeed()">Plant your Seed <v-icon>fas fa-seedling</v-icon></v-btn>
       </v-card-actions>
     </v-card>
 
@@ -52,12 +48,8 @@
                 <v-card-text>
                   <v-container grid-list-md>
                     <v-layout wrap>
-                    <v-flex l12 l6 md4>
-                      <v-text-field v-model="seed.Title"></v-text-field>
-                    </v-flex>
-                    <v-flex xs12>
-                      <v-text-field v-model="seed.Description"></v-text-field>
-                    </v-flex>
+                      <v-flex l12 l6 md4><v-text-field v-model="seed.Title"></v-text-field></v-flex>
+                      <v-flex xs12><v-text-field v-model="seed.Description"></v-text-field></v-flex>
                     </v-layout>
                   </v-container>
                 </v-card-text>
@@ -133,10 +125,10 @@ export default {
       seedsRef.child(key).update({edit: false, dialog: false});
     },
     showSeed (key){
-      const self = this
-      var seedId = seedsRef.child(key).key
-      console.log(seedId)
-      self.setSeedId(seedId)
+      const self = this;
+      var seedId = seedsRef.child(key).key;
+      console.log(seedId);
+      self.setSeedId(seedId);
       self.$router.push({name: 'seedPage', params: { seedId }})
     },
     filterSeeds(){

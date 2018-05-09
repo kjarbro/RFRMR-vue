@@ -1,47 +1,23 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
-      fixed
-      v-model="drawer"
-      app>
-       <v-list-tile @click="homeRoute">
-          <v-list-tile-action>
-            <v-icon>fas fa-home</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Seeds Home</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      
+    <v-navigation-drawer fixed v-model="drawer" app>
+      <v-list-tile @click="homeRoute">
+        <v-list-tile-action><v-icon>fas fa-home</v-icon></v-list-tile-action>
+        <v-list-tile-content><v-list-tile-title>Seeds Home</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
       <v-list dense>
-         <v-list-tile @click="profileRoute">
-          <v-list-tile-action>
-            <v-icon>fas fa-user-astronaut</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>My Profile</v-list-tile-title>
-          </v-list-tile-content>
+        <v-list-tile @click="profileRoute">
+          <v-list-tile-action><v-icon>fas fa-user-astronaut</v-icon></v-list-tile-action>
+          <v-list-tile-content><v-list-tile-title>My Profile</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
-        
         <v-list-tile @click="mySeedRoute">
-          <v-list-tile-action>
-            <v-icon>fas fa-seedling</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>My Seeds</v-list-tile-title>
-          </v-list-tile-content>
+          <v-list-tile-action><v-icon>fas fa-seedling</v-icon></v-list-tile-action>
+          <v-list-tile-content><v-list-tile-title>My Seeds</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
-
         <v-list-tile @click="mySproutRoute">
-          <v-list-tile-action>
-            <v-icon>fab fa-pagelines</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>My Sprouts</v-list-tile-title>
-          </v-list-tile-content>
+          <v-list-tile-action><v-icon>fab fa-pagelines</v-icon></v-list-tile-action>
+          <v-list-tile-content><v-list-tile-title>My Sprouts</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
-
-
       </v-list>
     </v-navigation-drawer>
 
@@ -59,41 +35,24 @@
       </v-container>
     </v-content>
 
-    <v-footer color="white" app>
-      <span class="teal--text"> RFRMR &copy; 2018</span>
-    </v-footer>
+    <v-footer color="white" app><span class="teal--text"> RFRMR &copy; 2018</span></v-footer>
     
     <div id="LoginDialog">
       <v-dialog v-model="signUpDialog" persistent max-width="500px">
         <v-card>
-          <v-card-title>
-            <span class="headline">Help us solve problems!</span>
-          </v-card-title>
-
+          <v-card-title><span class="headline">Help us solve problems!</span></v-card-title>
           <v-card-text>
             <v-container grid-list-md>
-              <span>
-                Sign up below!
-              </span><br>
+              <span>Sign up below!</span>
+              <br>
               <v-layout wrap>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field 
-                    v-model = "userName" 
-                    label="Username" 
-                    required></v-text-field>
+                  <v-text-field v-model = "userName" label="Username" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field 
-                  v-model ="userEmail" 
-                  label="Email" 
-                  required></v-text-field>
+                  <v-text-field v-model ="userEmail" label="Email" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <!-- <v-text-field 
-                  v-model = "userPassword" 
-                  type="password" 
-                  label = "Password"
-                  required></v-text-field> -->
                   <v-text-field
                     label="Enter your password"
                     hint="At least 8 characters"
@@ -122,9 +81,7 @@
     <div id="logOutDialog">
       <v-dialog v-model="logOutDialog" persistent max-width="500px">
         <v-card>
-          <v-card-title>
-            <span class="headline">Are you leaving us?</span>
-          </v-card-title>
+          <v-card-title><span class="headline">Are you leaving us?</span></v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click.native="logOutDialog = false">No I want to stay!</v-btn>
@@ -137,24 +94,15 @@
     <div id="signInDialog">
       <v-dialog v-model="signInDialog" persistent max-width="500px">
         <v-card>
-          <v-card-title>
-            <span class="headline">Sign In </span>
-          </v-card-title>
+          <v-card-title><span class="headline">Sign In </span></v-card-title>
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field 
-                  v-model ="userEmail" 
-                  label="Email" 
-                  required></v-text-field>
+                  <v-text-field v-model ="userEmail" label="Email" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field 
-                  v-model = "userPassword" 
-                  type="password" 
-                  label = "Password"
-                  required></v-text-field>
+                  <v-text-field v-model = "userPassword" type="password" label = "Password" required></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -199,13 +147,13 @@ export default {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
-        self.setUser(user)
-        self.signedInToggle = true
-        self.userId= user.uid
+        self.setUser(user);
+        self.signedInToggle = true;
+        self.userId= user.uid;
       } else {
         // No user is signed in.
-        console.log('No User')
-        self.signedInToggle = false
+        console.log('No User');
+        self.signedInToggle = false;
       }
     });
   },
