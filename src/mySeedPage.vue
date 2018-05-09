@@ -1,37 +1,10 @@
 <template>
   <div id = 'home'>
-    <!-- Submit Seed Card--> 
-        <!-- <v-card class="SeedCard">
-            <v-card-title primary-title>
-            <div>
-                <div class="headline">What problem do you want to solve today?</div>
-            </div>
-            </v-card-title>
-            <v-text-field
-                v-model="seedTitle"
-                label="Name your Seed"
-            ></v-text-field>
-            <v-text-field
-                v-model="seedDescription"
-                label="Describe the problem you wish to solve"
-            ></v-text-field>
-            <v-select
-                label="Categories"
-                v-model="seedCategory"
-                multiple
-                autocomplete
-                chips
-                :items="['Arts & Entertainment', 'Automotive & Vehicle','Beauty & Fitness','Business & Industrial','Computers & Technology','Education and Employment','Food & Drink','Home & Garden','Law & Government','Leisure & Hobbies','News','Science','Shopping','Sports','Sexuality','Philosophy','Travel','Video Games',]"
-            ></v-select>
-            <v-card-actions>
-                <v-btn flat @click="submitSeed()">Plant your Seed</v-btn>
-            </v-card-actions>
-        </v-card> -->
-     <div >
-     <v-layout class="grid">
-          <!-- Seed Cards -->
-            <div v-for="seed in seeds" :key="seed.id" >
-            <!-- Seed Card no edit -->
+  <div >
+  <v-layout class="grid">
+    <!-- Seed Cards -->
+      <div v-for="seed in seeds" :key="seed.id" >
+        <!-- Seed Card no edit -->
                 <div v-if="$store.state.user.uid == seed.UserID">
                     <div v-if="!seed.edit">
                         <v-card >
@@ -98,11 +71,11 @@
 </template>
 
 <script>
-import firebase from './firebase'
-import {seedsRef} from './firebase'
-import {mapMutations} from 'vuex'
-import {mapState} from 'vuex'
 
+import firebase from './firebase';
+import {seedsRef} from './firebase';
+import {mapMutations} from 'vuex';
+import {mapState} from 'vuex';
 
 export default {
   data () {
@@ -111,102 +84,72 @@ export default {
       seedDescription: '',
       activeSeedKey: '',
       Editdialog: false,
-      seedCategory:'',
+      seedCategory: '',
       userId: '',
     };
   },
   firebase: {
     seeds: seedsRef
   }, 
-
   methods: {
     setActiveSeed(key) {
-        this.activeSeedKey = (this.activeSeedKey == key) ? '' : key
+      this.activeSeedKey = (this.activeSeedKey == key) ? '' : key;
     },
-    // submitSeed(user){
-    //     var self = this
-    //     var user = self.$store.state.user
-    //     if (user){
-    //         seedsRef.push({Title: this.seedTitle, Description: this.seedDescription, Category: this.seedCategory, UserID: this.user.uid , edit:false})
-    //         this.seedTitle =''
-    //         this.seedDescription =''}
-    //     else {
-    //         //self.signUpDialog = true 
-    //         console.log('You need to sign in!')
-
-    //     }
-    // },
-    setEditSeed(key){
-      seedsRef.child(key).update({edit: true})
+    setEditSeed(key) {
+      seedsRef.child(key).update({edit: true});
     },
-    deleteSeed(key){
+    deleteSeed(key) {
       seedsRef.child(key).remove();
     },
-    saveEdit(seed){
-      const key = seed['.key']
-      seedsRef.child(key).set({Title: seed.Title, Description: seed.Description , edit: false, dialog: false})
+    saveEdit(seed) {
+      const key = seed['.key'];
+      seedsRef.child(key).set({Title: seed.Title, Description: seed.Description , edit: false, dialog: false});
     },
-    cancelEdit(key){
-      seedsRef.child(key).update({edit: false, dialog: false})
+    cancelEdit(key) {
+      seedsRef.child(key).update({edit: false, dialog: false});
     },
-    showSeed (key){
-        const self = this
-        var seedId = seedsRef.child(key).key
-        console.log(seedId)
-        self.setSeedId(seedId)
-        self.$router.push({name: 'seedPage', params: { seedId }})
-
-
+    showSeed (key) {
+      const self = this;
+      var seedId = seedsRef.child(key).key;
+      console.log(seedId);
+      self.setSeedId(seedId);
+      self.$router.push({name: 'seedPage', params: { seedId }});
     },
     ...mapMutations(['setUser']),
     ...mapMutations(['setSeedId'])
   },
   computed: {
-      ...mapState(['user']),
-      ...mapState(['seedId'])
+    ...mapState(['user']),
+    ...mapState(['seedId'])
   }
 }
+
 </script>
 
+
 <style>
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  
-  margin: 0 20px;
-}
-
-a {
-  color: #42b983;
-}
-
-.SeedCard{
-    padding: 20px 40px; 
-    margin: 20px 20px;
-}
+h1, h2 {font-weight: normal; }
+ul {list-style-type: none; padding: 0; }
+li {margin: 0 20px; }
+a {color: #42b983; }
+.SeedCard {padding: 20px 40px; margin: 20px 20px; }
 
 .grid {
-    display:-ms-grid;
-    grid-column-start: 10px;
-    grid-template-columns: repeat(3, 3fr);
-    grid-gap: 20px;
-    grid-auto-rows: minmax(100px, auto);
+  display:-ms-grid;
+  grid-column-start: 10px;
+  grid-template-columns: repeat(3, 3fr);
+  grid-gap: 20px;
+  grid-auto-rows: minmax(100px, auto);
 }
 
 </style>

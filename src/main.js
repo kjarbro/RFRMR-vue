@@ -16,72 +16,38 @@ import mySeedPage from './mySeedPage.vue';
 import mySproutPage from './mySproutPage.vue';
 import newSproutPage from './newSproutPage.vue';
 
-
 Vue.use(Vuex)
-Vue.use(Vuetify,{
-  theme: {
-    primary: '#64FFDA',
-    secondary: '#C0CA33',
-    accent: '#8c9eff',
-    text: '#616161',
-    error: '#b71c1c'
-  }
-} )
+Vue.use(Vuetify, {theme: {primary: '#64FFDA', secondary: '#C0CA33', accent: '#8c9eff', text: '#616161', error: '#b71c1c'}});
 Vue.use(VueFire);
 Vue.use(VueRouter);
 
 const routes = [
-  {path:'/seed/:seedId',
-  name: 'seedPage', 
-  component: seedPage,},
-
-  {path:'/',
-  name: 'homePage',
-  component: home },
-
-  {path:'/sprout/:sproutId',
-  name: 'sproutPage',
-  component: sproutPage},
-
-  {path:'/user/:userId',
-  name: 'profilePage',
-  component: profilePage },
-
-  {path:'/myseeds/:userId',
-  name: 'mySeedPage',
-  component: mySeedPage },
-
-  {path:'/mySprouts/:userId',
-  name: 'mySproutPage',
-  component: mySproutPage },
-
-  {path:'/sprout/new',
-  name: 'newSproutPage',
-  component: newSproutPage },
+  {path:'/seed/:seedId', name: 'seedPage', component: seedPage},
+  {path:'/', name: 'homePage', component: home},
+  {path:'/sprout/:sproutId', name: 'sproutPage', component: sproutPage},
+  {path:'/user/:userId', name: 'profilePage', component: profilePage},
+  {path:'/myseeds/:userId', name: 'mySeedPage', component: mySeedPage},
+  {path:'/mySprouts/:userId', name: 'mySproutPage', component: mySproutPage},
+  {path:'/sprout/new', name: 'newSproutPage', component: newSproutPage},
 ];
 
-const router = new VueRouter({
-  routes,
-  mode: 'history'
-})
+const router = new VueRouter({routes, mode: 'history'});
 
 const store = new Vuex.Store({
-  state: {
-    user: '',
-    seedId: '',
-  },
+  state: {user: '', seedId: ''},
   mutations: {
     setUser (state, user) {
       state.user = user
     },
-    setSeedId (state, seedId){
-    state.seedId = seedId
-  }}
-})
+    setSeedId (state, seedId) {
+      state.seedId = seedId
+    }
+  }
+});
 
 var app = new Vue({
   el: '#app',
   router,
   store,
   render: h => h(App)
-})
+});

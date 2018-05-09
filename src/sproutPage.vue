@@ -3,14 +3,9 @@
     <v-toolbar color="#42b983" dark tabs>
       <v-toolbar-title>{{sproutName}}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-tabs
-        color="teal"
-        slot="extension"
-        v-model="tab"
-        grow
-      >
+      <v-tabs color="teal" slot="extension" v-model="tab" grow>
         <v-tabs-slider color="green" ></v-tabs-slider>
-        <v-tab  v-for="item in items" :key="item">
+        <v-tab v-for="item in items" :key="item">
           {{ item }}
         </v-tab>
       </v-tabs>
@@ -26,21 +21,22 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        tab: null,
-        items: [
-          'to do', 'chat', 'files'
-        ],
-        text: ['Lorem iabore et dolore ion ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'ndjsk', 'test3'],
-        sproutName: 'Test'
-      }
-    }
+
+export default {
+  data () {
+    return {
+      tab: null,
+      items: ['to do', 'chat', 'files'],
+      text: ['Lorem iabore et dolore ion ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'ndjsk', 'test3'],
+      sproutName: 'Test'
+    };
   }
+};
+
 </script>
 
 <style>
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -60,7 +56,6 @@ ul {
 }
 
 li {
-  
   margin: 0 20px;
 }
 
@@ -68,17 +63,17 @@ a {
   color: #42b983;
 }
 
-.SeedCard{
-    padding: 20px 40px; 
-    margin: 20px 20px;
+.SeedCard {
+  padding: 20px 40px;
+  margin: 20px 20px;
 }
 
 .grid {
-    display: grid;
-    grid-column-start: 10px;
-    grid-template-columns: repeat(3, 3fr);
-    grid-gap: 20px;
-    grid-auto-rows: minmax(100px, auto);
+  display: grid;
+  grid-column-start: 10px;
+  grid-template-columns: repeat(3, 3fr);
+  grid-gap: 20px;
+  grid-auto-rows: minmax(100px, auto);
 }
 
 </style>

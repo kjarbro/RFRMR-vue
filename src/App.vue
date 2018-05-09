@@ -173,9 +173,10 @@
 
 
 <script>
-import firebase from 'firebase'
-import {mapMutations} from 'vuex'
-import {mapState} from 'vuex'
+
+import firebase from 'firebase';
+import {mapMutations} from 'vuex';
+import {mapState} from 'vuex';
 
 export default {
   data () {
@@ -189,88 +190,75 @@ export default {
       userName: '',
       userEmail: '',
       userPassword:'',
-      userId:'',
-
+      userId:''
     };
   },
-  
   mounted () {
     const user = firebase.auth().currentUser;
-    const self = this
+    const self = this;
     firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      // User is signed in.
-      self.setUser(user)
-      self.signedInToggle = true
-      self.userId= user.uid
-    } else {
-      // No user is signed in.
-      console.log('No User')
-      self.signedInToggle = false
-    }
-});
+      if (user) {
+        // User is signed in.
+        self.setUser(user)
+        self.signedInToggle = true
+        self.userId= user.uid
+      } else {
+        // No user is signed in.
+        console.log('No User')
+        self.signedInToggle = false
+      }
+    });
   },
   computed : mapState(['user']),
   methods : {
     signUp (user) {
-      var name = this.userName
-      var email = this.userEmail
-      var password = this.userPassword
+      var name = this.userName;
+      var email = this.userEmail;
+      var password = this.userPassword;
       firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-        this.userName = ''
-        this.userEmail = ''
-        this.userPassword = ''
-        this.signedInToggle = true
-      })
+        this.userName = '';
+        this.userEmail = '';
+        this.userPassword = '';
+        this.signedInToggle = true;
+      });
     },
     signIn (user) {
-      var email = this.userEmail
-      var password = this.userPassword
+      var email = this.userEmail;
+      var password = this.userPassword;
       firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
         this.userEmail = ''
         this.userPassword = ''
         this.signedInToggle = true
-      })
+      });
     },
-
     drawerToggle (signedInToggle){
-      var drawer = (this.signedInToggle == true) ? this.drawer =!this.drawer : this.signUpDialog = true
-
+      var drawer = (this.signedInToggle == true) ? this.drawer =!this.drawer : this.signUpDialog = true;
     },
-
     logOut (user) {
       firebase.auth().signOut().then(function() {
         // Sign-out successful.
-        this.signedInToggle = false
-
+        this.signedInToggle = false;
       }).catch(function(error) {
         // An error happened.
       });
     },
     homeRoute (){
-      this.$router.push({name: 'homePage'})
-      
+      this.$router.push({name: 'homePage'});
     },
     profileRoute (){
-       var userId = this.userId
-      this.$router.push({name: 'profilePage', params: { userId }})
-      
+      var userId = this.userId;
+      this.$router.push({name: 'profilePage', params: { userId }});
     },
     mySeedRoute (){
-      var userId = this.userId
-      this.$router.push({name: 'mySeedPage', params: { userId }})
-      
+      var userId = this.userId;
+      this.$router.push({name: 'mySeedPage', params: { userId }});
     },
     mySproutRoute (){
-      var userId = this.userId
-      this.$router.push({name: 'mySproutPage', params: { userId }})
-      
+      var userId = this.userId;
+      this.$router.push({name: 'mySproutPage', params: { userId }});
     },
-    ...mapMutations(['setUser']),
+    ...mapMutations(['setUser'])
   }
 }
 
 </script>
-
-   
-
