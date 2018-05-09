@@ -174,9 +174,9 @@ export default {
       var email = this.userEmail;
       var password = this.userPassword;
       firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-        this.userEmail = ''
-        this.userPassword = ''
-        this.signedInToggle = true
+        this.userEmail = '';
+        this.userPassword = '';
+        this.signedInToggle = true;
       });
     },
     drawerToggle (signedInToggle){
@@ -184,10 +184,8 @@ export default {
     },
     logOut (user) {
       firebase.auth().signOut().then(function() {
-        // Sign-out successful.
         this.signedInToggle = false;
       }).catch(function(error) {
-        // An error happened.
       });
     },
     homeRoute () {

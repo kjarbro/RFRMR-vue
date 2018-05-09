@@ -287,31 +287,12 @@ export default {
   margin-top: 60px;
 }
 
-h1, h2 {
-  font-weight: normal;
-}
+h1, h2 {font-weight: normal; }
+ul {list-style-type: none; padding: 0; }
+li {margin: 0 20px; }
+a {color: #42b983; }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  margin: 0 20px;
-}
-
-a {
-  color: #42b983;
-}
-
-.CommentCard {
-  padding: 20px 40px; 
-}
-
-.SeedCard {
-  padding: 20px 40px; 
-  width: 1200px; 
-  margin: 20px 40px;
-}
+.CommentCard {padding: 20px 40px; }
+.SeedCard {padding: 20px 40px; width: 1200px; margin: 20px 40px; }
 
 </style>
