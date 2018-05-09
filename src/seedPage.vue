@@ -10,16 +10,29 @@
             {{currentSeed.Description}}
             
             </v-card-text>
-            <v-tooltip right>
+            <v-tooltip bottom>
                 <v-btn 
+                    light
                     color="primary" 
                     slot="activator" 
                     @click="setSproutSeed(currentSeed['.key'])" 
                     @click.native.stop="newSproutDialog=true"> 
                     Create Sprout
-                    <v-icon right>fab fa-pagelines</v-icon> </v-btn>
+                    <v-icon right>fab fa-pagelines</v-icon> 
+                </v-btn>
+                <v-btn 
+                    light
+                    color="primary" 
+                    slot="activator" 
+                    @click="seedChildrenRoute" > 
+                    View this seed's sprouts
+                    <v-icon right>fab fa-pagelines</v-icon> 
+                </v-btn>
                 <span>Sprouts allow you to organize your team so that you can more effectively solve problems.</span>
-                </v-tooltip>
+            </v-tooltip>
+            <v-flex> 
+                
+            </v-flex>    
         </v-card>
         <v-card class="CommentCard">
             <v-card-title primary-title>
@@ -44,7 +57,10 @@
                         <v-card-title primary-title>
                             <div class="headline">{{comment.Comment}}</div>
                         </v-card-title>
-                        <small> by: {{comment.UserId}}</small>
+                        <v-card-text>
+                             <small> by: {{comment.UserId}}</small>
+                        </v-card-text>
+                       
                         <v-card-actions>
                             <v-btn flat @click="deleteComment(comment['.key'])">Delete</v-btn>
                             <v-btn flat @click="setEditComment(comment['.key'])" @click.native.stop="Editdialog=true">Edit</v-btn>
@@ -147,6 +163,7 @@
                                 </v-btn> 
                             </v-flex>
                             
+                            
                         </v-list>
                     </v-card-text>
                      
@@ -186,6 +203,7 @@ export default {
       UserId: '',
       currentSeed: '',
       key: '',
+      sproutId: ''
 
       
     };
@@ -212,7 +230,7 @@ export default {
         var self = this
         var user = self.$store.state.user
         if (user){
-            sproutsRef.push({Title: this.sproutTitle, 
+            var newSprout = sproutsRef.push({Title: this.sproutTitle, 
             Description: this.sproutDescription, 
             // Category: this.seedCategory, 
             OwnerId: this.user.uid,
@@ -223,8 +241,9 @@ export default {
             })
             this.sproutTitle =''
             this.sproutDescription =''
-            //self.$router.push({name: 'sproutPage', params: { sproutId }})
             this.newSproutDialog = false
+            var sproutId = newSprout.key
+            self.$router.push({name: 'sproutPage', params: { sproutId }})
             }
         else {
             //self.signUpDialog = true 
@@ -257,8 +276,13 @@ export default {
     setSproutSeed(key) {
         
     },
-    // inviteSelector {
-
+   seedChildrenRoute(key){
+        var userId = this.userId
+      this.$router.push({name: 'seedChildSprouts', params: { key }})
+      
+   },
+   // inviteSelector {
+    
     // },
     ...mapMutations(['setUser']),
     ...mapMutations(['setSeedId'])

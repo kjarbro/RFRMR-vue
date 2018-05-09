@@ -112,7 +112,8 @@
     </div>
   </div>
 </template>
-
+  
+  
 <script>
 import firebase from './firebase'
 import {seedsRef} from './firebase'
