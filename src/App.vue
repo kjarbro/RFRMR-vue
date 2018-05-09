@@ -190,18 +190,18 @@ export default {
         // An error happened.
       });
     },
-    homeRoute (){
+    homeRoute () {
       this.$router.push({name: 'homePage'});
     },
-    profileRoute (){
+    profileRoute () {
       var userId = this.userId;
       this.$router.push({name: 'profilePage', params: { userId }});
     },
-    mySeedRoute (){
+    mySeedRoute () {
       var userId = this.userId;
       this.$router.push({name: 'mySeedPage', params: { userId }});
     },
-    mySproutRoute (){
+    mySproutRoute () {
       var userId = this.userId;
       this.$router.push({name: 'mySproutPage', params: { userId }});
     },

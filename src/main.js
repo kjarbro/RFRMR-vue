@@ -13,8 +13,6 @@ import home from './Home.vue';
 import sproutPage from './sproutPage.vue';
 import profilePage from './profilePage.vue';
 import mySeedPage from './mySeedPage.vue';
-import mySproutPage from './mySproutPage.vue';
-import newSproutPage from './newSproutPage.vue';
 
 Vue.use(Vuex)
 Vue.use(Vuetify, {theme: {primary: '#64FFDA', secondary: '#C0CA33', accent: '#8c9eff', text: '#616161', error: '#b71c1c'}});
@@ -26,9 +24,7 @@ const routes = [
   {path:'/', name: 'homePage', component: home},
   {path:'/sprout/:sproutId', name: 'sproutPage', component: sproutPage},
   {path:'/user/:userId', name: 'profilePage', component: profilePage},
-  {path:'/myseeds/:userId', name: 'mySeedPage', component: mySeedPage},
-  {path:'/mySprouts/:userId', name: 'mySproutPage', component: mySproutPage},
-  {path:'/sprout/new', name: 'newSproutPage', component: newSproutPage},
+  {path:'/myseeds/:userId', name: 'mySeedPage', component: mySeedPage}
 ];
 
 const router = new VueRouter({routes, mode: 'history'});

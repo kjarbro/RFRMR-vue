@@ -27,6 +27,7 @@
                 </v-card-text>
               </v-card>
             </div> 
+          </div>
 
           <!-- Seed Cards Edit-->
           <div v-else>
@@ -36,12 +37,8 @@
                 <v-card-text>
                 <v-container grid-list-md>
                   <v-layout wrap>
-                  <v-flex l12 l6 md4>
-                    <v-text-field v-model="seed.Title"></v-text-field>
-                  </v-flex>
-                  <v-flex xs12>
-                    <v-text-field v-model="seed.Description"></v-text-field>
-                  </v-flex>
+                    <v-flex l12 l6 md4><v-text-field v-model="seed.Title"></v-text-field></v-flex>
+                    <v-flex xs12><v-text-field v-model="seed.Description"></v-text-field></v-flex>
                   </v-layout>
                 </v-container>
                 </v-card-text>
