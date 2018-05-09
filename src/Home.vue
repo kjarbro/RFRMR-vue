@@ -63,9 +63,6 @@
                             
                             <v-card-actions>
                                 <v-btn flat @click="showSeed(seed['.key'])">Show</v-btn>
-                                <!-- <v-btn flat @click="deleteSeed(seed['.key'])">Delete</v-btn>
-                                <v-btn flat @click="setEditSeed(seed['.key'])" @click.native.stop="Editdialog=true">Edit</v-btn>
-                                 -->
                                 <v-spacer></v-spacer>
                                 <v-btn icon @click.native="setActiveSeed(seed['.key'])">
                                     <v-icon>{{ activeSeedKey == seed['.key'] ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
