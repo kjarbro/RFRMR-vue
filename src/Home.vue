@@ -13,8 +13,9 @@
       <v-text-field v-model="seedTitle" label="Name your Seed"></v-text-field>
       <v-text-field v-model="seedDescription" label="Describe the problem you wish to solve"></v-text-field>
       <v-select label="Categories"v-model="seedCategory"multiple autocomplete chips :items= "categories"></v-select>
+      <v-alert :value="notSignedIn" type="warning">You have to be signed in to do that.</v-alert>
       <v-card-actions>
-        <v-btn class="button" flat @click="submitSeed()">Plant your Seed <v-icon>fas fa-seedling</v-icon></v-btn>
+        <v-btn class="button" @click="submitSeed()" light color="primary">Plant your Seed <v-icon>fas fa-seedling</v-icon></v-btn>
       </v-card-actions>
     </v-card>
 
@@ -27,13 +28,13 @@
               <br>
               <v-card-text><small class = "seedCard"> by: {{seed.UserID}}</small></v-card-text>
               <v-card-actions>
-                <v-btn flat @click="showSeed(seed[".key"])">Show</v-btn>
+                <v-btn flat @click="showSeed(seed['.key'])">Show</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn icon @click.native="setActiveSeed(seed[".key"])">
-                  <v-icon>{{ activeSeedKey == seed[".key"] ? "keyboard_arrow_down" : "keyboard_arrow_up" }}</v-icon>
+                <v-btn icon @click.native="setActiveSeed(seed['.key'])">
+                  <v-icon>{{ activeSeedKey == seed['.key'] ? "keyboard_arrow_down" : "keyboard_arrow_up" }}</v-icon>
                 </v-btn>
               </v-card-actions>
-              <v-card-text v-if="activeSeedKey == seed[".key"]">
+              <v-card-text v-if="activeSeedKey == seed['.key']">
                 {{seed.Description}}
                 <div v-for="category in seed.Category" :key="category">
                   <v-chip> {{ category }} </v-chip>
@@ -55,7 +56,7 @@
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" flat @click.native= "Editdialog = false" @click="cancelEdit(seed[".key"])">Cancel</v-btn>
+                  <v-btn color="blue darken-1" flat @click.native= "Editdialog = false" @click="cancelEdit(seed['.key'])">Cancel</v-btn>
                   <v-btn color="blue darken-1" flat @click.native= "Editdialog = false" @click="saveEdit(seed)">Save</v-btn>
                 </v-card-actions>
               </v-card>
@@ -70,7 +71,8 @@
 
 <script>
 
-import firebase from './firebase';
+import firebase from 'firebase';
+import app from './App.vue';
 import {seedsRef} from './firebase';
 import {mapMutations} from 'vuex';
 import {mapState} from 'vuex';
@@ -82,6 +84,7 @@ export default {
       seedDescription: '',
       activeSeedKey: '',
       Editdialog: false,
+      notSignedIn: false,
       seedCategory:'',
       userId: '',
       categories: ['Arts & Entertainment', 'Automotive & Vehicle', 'Beauty & Fitness', 'Business & Industrial',
@@ -100,15 +103,18 @@ export default {
     },
     submitSeed(user) {
       var self = this;
-      var user = self.$store.state.user;
+      var user = firebase.auth().currentUser;
       if (user) {
         seedsRef.push({Title: this.seedTitle, Description: this.seedDescription, Category: this.seedCategory, UserID: this.user.uid , edit:false});
         this.seedTitle = '';
         this.seedDescription = '';
         this.seedCategory = [''];
+        self.notSignedIn = false;
       }
       else {
+        var notSignedIn = self.notSignedIn;
         console.log('You need to sign in!');
+        self.notSignedIn = true;
       }
     },
     setEditSeed(key){

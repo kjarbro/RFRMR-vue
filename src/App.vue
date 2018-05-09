@@ -163,6 +163,7 @@ export default {
       var name = this.userName;
       var email = this.userEmail;
       var password = this.userPassword;
+      var displayName = this.userName;
       firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
         this.userName = '';
         this.userEmail = '';
