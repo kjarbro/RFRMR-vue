@@ -26,7 +26,7 @@
             <v-card>
               <v-card-title primary-title><div class="headline">{{seed.Title}}</div></v-card-title>
               <br>
-              <v-card-text><small class = "seedCard"> by: {{seed.UserID}}</small></v-card-text>
+              <v-card-text><small class="seedCard"> by: {{seed.UserID}}</small></v-card-text>
               <v-card-actions>
                 <v-btn flat @click="showSeed(seed['.key'])">Show</v-btn>
                 <v-spacer></v-spacer>

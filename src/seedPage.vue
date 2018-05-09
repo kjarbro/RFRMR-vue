@@ -3,36 +3,16 @@
   
     <!--Seed Card--> 
     <v-card class="SeedCard">
-        <v-card-title primary-title.display-4>
-           <h1> {{currentSeed.Title}} </h1>
-        </v-card-title>
-
-        <v-card-text>
-        {{currentSeed.Description}}
-        
-        </v-card-text>
+      <v-card-title primary-title.display-4><h1> {{currentSeed.Title}} </h1></v-card-title>
+        <v-card-text> {{currentSeed.Description}} </v-card-text>
         <v-tooltip bottom>
-            <v-btn 
-                light
-                color="primary" 
-                slot="activator" 
-                @click="setSproutSeed(currentSeed['.key'])" 
-                @click.native.stop="newSproutDialog=true"> 
-                Create Sprout
-                <v-icon right>fab fa-pagelines</v-icon> 
+            <v-btn light color="primary" slot="activator" @click="setSproutSeed(currentSeed['.key'])" @click.native.stop="newSproutDialog=true">
+              Create Sprout <v-icon right>fab fa-pagelines</v-icon>
             </v-btn>
-            <v-btn 
-                light
-                color="primary" 
-                slot="activator" 
-                @click="seedChildrenRoute" > 
-                View this seed's sprouts
-                <v-icon right>fab fa-pagelines</v-icon> 
-            </v-btn>
+            <v-btn light color="primary" slot="activator" @click="seedChildrenRoute"> View this seed's sprouts<v-icon right>fab fa-pagelines</v-icon></v-btn>
             <span>Sprouts allow you to organize your team so that you can more effectively solve problems.</span>
         </v-tooltip>
         <v-flex> 
-            
         </v-flex>    
     </v-card>
     <v-card class="CommentCard">
