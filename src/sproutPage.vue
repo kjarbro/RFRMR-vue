@@ -1,19 +1,40 @@
 <template>
   <div>
-    <v-toolbar color="#42b983" dark tabs>
-      <v-toolbar-title>{{sproutName}}</v-toolbar-title>
+    <v-toolbar color="primary" tabs>
+      <v-toolbar-title>{{currentSprout.Title}}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-tabs color="teal" slot="extension" v-model="tab" grow>
+      <v-tabs color="primary" slot="extension" v-model="tab" grow>
         <v-tabs-slider color="green" ></v-tabs-slider>
-        <v-tab v-for="item in items" :key="item">
+        <v-tab v-for="item in tabTitles" :key="item">
           {{ item }}
         </v-tab>
       </v-tabs>
     </v-toolbar>
     <v-tabs-items v-model="tab">
-      <v-tab-item v-for="item in items" :key="item">
+      <v-tab-item>
         <v-card flat>
-          <v-card-text v-for="item in text" :key="item">{{ text }}</v-card-text>
+          <v-card-text >{{ currentSprout.Description }}</v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text >To do</v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text >Chat</v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text >Files</v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          
+          <v-card-text >Members</v-card-text>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
@@ -22,15 +43,39 @@
 
 <script>
 
+import firebase from 'firebase';
+import {seedsRef} from './firebase';
+import {sproutsRef} from './firebase';
+import {mapMutations} from 'vuex';
+import {mapState} from 'vuex';
+
 export default {
   data () {
     return {
       tab: null,
-      items: ['to do', 'chat', 'files'],
+      tabTitles: ['description','to do', 'chat', 'files', 'members'],
       text: ['Lorem iabore et dolore ion ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'ndjsk', 'test3'],
-      sproutName: 'Test'
+      sproutName: '',
+      key: '',
+      currentSprout: ''
     };
-  }
+  },
+  firebase: {
+    seeds: seedsRef,
+    sprouts: sproutsRef
+  }, 
+  mounted (currentSprout) {
+    const self = this;
+    var key = self.$route.params.sproutId;
+    console.log(key);
+    var firebaseSprout = sproutsRef.child(key).on('value', function(snapshot) {
+      self.currentSprout = snapshot.val();
+      self.key = key;
+      console.log(currentSprout);
+    }, function(errorObject) {
+      console.log("The read failed: " + errorObject.code);
+    });
+  },
 };
 
 </script>

@@ -26,8 +26,6 @@
         <v-btn flat @click="submitSeedComment()">Post Comment</v-btn>
       </v-card-actions>
     </v-card>
-
-    <div>
         <div v-for="comment in currentSeed.Comments" :key="comment.id" >
             <!-- Seed Card no edit -->
             <div v-if="!comment.edit">
@@ -69,7 +67,7 @@
                     </v-card>
                 </v-dialog>
             </div>
-    </div>
+    
 
     <div>
         <v-dialog

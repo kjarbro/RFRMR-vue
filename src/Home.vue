@@ -105,7 +105,13 @@ export default {
       var self = this;
       var user = firebase.auth().currentUser;
       if (user) {
-        seedsRef.push({Title: this.seedTitle, Description: this.seedDescription, Category: this.seedCategory, UserID: this.user.uid , edit:false});
+        seedsRef.push({Title: this.seedTitle, 
+          Description: this.seedDescription, 
+          Category: this.seedCategory, 
+          UserID: this.user.uid,
+          UserEmail: this.user.email,
+          UserName: this.user.displayName,
+          edit:false});
         this.seedTitle = '';
         this.seedDescription = '';
         this.seedCategory = [''];

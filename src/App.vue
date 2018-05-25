@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app>
     <v-navigation-drawer fixed v-model="drawer" app>
       <v-list-tile @click="homeRoute">
         <v-list-tile-action><v-icon>fas fa-home</v-icon></v-list-tile-action>
@@ -46,11 +46,16 @@
               <span>Sign up below!</span>
               <br>
               <v-layout wrap>
-                <v-flex xs12 sm6 md4>
+                <!-- <v-flex xs12 sm6 md4>
                   <v-text-field v-model = "userName" label="Username" required></v-text-field>
-                </v-flex>
+                </v-flex> -->
                 <v-flex xs12>
-                  <v-text-field v-model ="userEmail" label="Email" required></v-text-field>
+                  <v-text-field 
+                  v-model ="userEmail" 
+                  label="Email"
+                  :rules="[rules.required, rules.email]"
+                  required
+                  ></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
@@ -62,6 +67,7 @@
                     :append-icon-cb="() => (e1 = !e1)"
                     :type="e1 ? 'password' : 'text'"
                     counter
+                    required
                    ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -70,9 +76,9 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="signUpDialog = false" @click="signInDialog = true">Already Helping!</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="signUpDialog = false" @click="signUp(user)">Help us solve problems</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="signUpDialog = false" @click="drawerToggle">Cancel</v-btn>
+            <v-btn color="primary" flat @click.native="signUpDialog = false" @click="signInDialog = true">Already Helping!</v-btn>
+            <v-btn color="primary" flat @click="signUp(user)">Help us solve problems</v-btn>
+            <v-btn color="primary" flat @click.native="signUpDialog = false" @click="drawerToggle">Cancel</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -84,8 +90,8 @@
           <v-card-title><span class="headline">Are you leaving us?</span></v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="logOutDialog = false">No I want to stay!</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="logOutDialog = false" @click="logOut(user)">Yeah I've got to go</v-btn>
+            <v-btn color="primary" flat @click.native="logOutDialog = false">No I want to stay!</v-btn>
+            <v-btn color="primary" flat @click.native="logOutDialog = false" @click="logOut(user)">Yeah I've got to go</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -99,10 +105,19 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field v-model ="userEmail" label="Email" required></v-text-field>
+                  <v-text-field 
+                    v-model ="userEmail" 
+                    label="Email" 
+                    required
+                    :rules="[rules.required, rules.email]"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field v-model = "userPassword" type="password" label = "Password" required></v-text-field>
+                </v-flex>
+                <v-flex>
+                  <v-alert :value="noPassword" type="warning">Invalid password.</v-alert>
+                  <v-alert :value="loginError" type="warning">{{loginErrorMessage}}</v-alert>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -110,8 +125,8 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="signInDialog = false">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="signInDialog = false" @click="signIn(user)">Submit</v-btn>
+            <v-btn color="primary" flat @click.native="signInDialog = false">Cancel</v-btn>
+            <v-btn color="primary" flat @click.native="signInDialog = false" @click="signIn(user)">Submit</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -134,11 +149,21 @@ export default {
       signUpDialog: false,
       signInDialog: false,
       logOutDialog: false,
+      noPassword: false,
+      loginError: false,
+      loginErrorMessage: '',
       e1: false,
       userName: '',
       userEmail: '',
       userPassword:'',
-      userId:''
+      userId:'',
+      rules: {
+        required: (value) => !!value || 'Required.',
+        email: (value) => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || 'Invalid e-mail.'
+        }
+      }
     };
   },
   mounted () {
@@ -160,11 +185,22 @@ export default {
   computed : mapState(['user']),
   methods : {
     signUp (user) {
-      var name = this.userName;
       var email = this.userEmail;
       var password = this.userPassword;
-      var displayName = this.userName;
+      var self = this;
+      var name = self.userName;
       firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        // var user = firebase.auth().currentUser;
+        // user.updateProfile({displayName: this.userName});
+        var user = firebase.auth().currentUser;
+        user.updateProfile({
+        displayName: name
+        //photoURL: "https://example.com/jane-q-user/profile.jpg"
+        }).then(function() {
+          // Update successful.
+        }).catch(function(error) {
+          // An error happened.
+        }) ;
         this.userName = '';
         this.userEmail = '';
         this.userPassword = '';
@@ -174,20 +210,36 @@ export default {
     signIn (user) {
       var email = this.userEmail;
       var password = this.userPassword;
+      var self = this
       firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-        this.userEmail = '';
-        this.userPassword = '';
-        this.signedInToggle = true;
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode === 'auth/wrong-password') {
+          self.noPassword = true
+          self.signInDialog = true
+        } else {
+          self.loginError = true
+          self.signInDialog = true
+          self.loginErrorMessage = errorMessage
+        }
+        console.log(error);
+        
       });
+      self.userEmail = '';
+      self.userPassword = '';
+      self.signedInToggle = true;
+      self.signInDialog = false
     },
     drawerToggle (signedInToggle){
       var drawer = (this.signedInToggle == true) ? this.drawer =!this.drawer : this.signUpDialog = true;
     },
     logOut (user) {
       firebase.auth().signOut().then(function() {
-        this.signedInToggle = false;
       }).catch(function(error) {
       });
+      this.$router.push({name: 'homePage'})
+      this.signedInToggle = false
+      this.drawer = false
     },
     homeRoute () {
       this.$router.push({name: 'homePage'});

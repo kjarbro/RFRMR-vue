@@ -13,8 +13,9 @@
                   </v-flex>
                   <v-flex xl12 xl6>
                     <div>
-                      <div>UserName:  {{name}}</div>
+                      <div>UserName: {{name}}</div>
                       <div>Email: {{email}}</div>
+                      <div>Bio: {{bio}}</div>
                       <v-btn flat @click.native="profile = false, profileEdit= true">Edit</v-btn>
                     </div>
                   </v-flex>
@@ -88,11 +89,28 @@
           </v-layout>
         </v-container>
         <v-subheader>Sprouts</v-subheader>
-        <v-flex 
-            v-if="$store.state.user.uid == sprout.UserID" 
-            v-for="sprout in sprouts" :key="sprout.id" sm4>
-                <!-- Seed Card no edit -->
-        </v-flex>
+        <v-container fluid grid-list-sm>
+          <v-layout row wrap>
+            <v-flex 
+                v-if="$store.state.user.uid == sprout.OwnerId" 
+                v-for="sprout in sprouts" :key="sprout.id" sm4>
+                  <v-card>
+                      <v-card-title primary-title><div class="headline">{{sprout.Title}}</div></v-card-title>
+                      <br>
+                      <v-card-text><small class = "seedCard"> by: {{sprout.OwnerId}}</small></v-card-text>
+                      <v-card-actions>
+                        <v-btn flat @click="showSprout(sprout['.key'])">Show</v-btn>
+                        <v-btn flat @click="deleteSprout(sprout['.key'])">Delete</v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn icon @click.native="setActiveSeed(sprout['.key'])">
+                            <v-icon>{{ activeSeedKey == sprout['.key'] ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+                        </v-btn>
+                      </v-card-actions>
+                      <v-card-text v-if="activeSeedKey == sprout['.key']"> {{sprout.Description}} </v-card-text>
+                  </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
       </v-card>
     </v-flex>
   </v-layout>
@@ -103,6 +121,7 @@
 import firebase from 'firebase'
 import {seedsRef} from './firebase'
 import {sproutsRef} from './firebase'
+import {usersRef} from './firebase'
 import {mapMutations} from 'vuex'
 import {mapState} from 'vuex'
 
@@ -117,17 +136,18 @@ export default {
         email: '',
         photoUrl: '',
         emailVerified: '',
-        uid: ''
+        uid: '',
+        bio: ''
     };
   },
   firebase: {
     seeds: seedsRef,
     sprouts: sproutsRef
   },
-  mounted() {
+  beforeMount() {
     var self = this;
     var user = firebase.auth().currentUser;
-    if (user != null) {
+    if (user) {
       self.name = user.displayName;
       self.email = user.email;
       self.photoUrl = user.photoURL;
@@ -135,10 +155,10 @@ export default {
       self.uid = user.uid;
     }   
 },
- updated() {
+ beforeUpdate() {
     var self = this;
     var user = firebase.auth().currentUser;
-    if (user != null) {
+    if (user) {
       self.name = user.displayName;
       self.email = user.email;
       self.photoUrl = user.photoURL;
@@ -169,6 +189,13 @@ export default {
       console.log(seedId);
       self.setSeedId(seedId);
       self.$router.push({name: 'seedPage', params: {seedId}});
+    },
+    showSprout (key){
+      const self = this;
+      var sproutId = sproutsRef.child(key).key;
+      console.log(sproutId);
+      //self.setSproutId(sporutId);
+      self.$router.push({name: 'sproutPage', params: {sproutId}});
     },
     profileUpdate(user){
       var user = firebase.auth().currentUser;
